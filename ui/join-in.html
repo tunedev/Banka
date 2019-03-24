@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+    />
+    <link rel="stylesheet" href="css/main.css" />
+    <link
+      rel="shortcut icon"
+      href="images/banka-favicon.png"
+      type="image/x-icon"
+    />
+
+    <title>Sign in</title>
+  </head>
+  <body>
+    <main class="container__entry">
+      <aside class="sidebar">
+        <a class="sidebar__close">&times;</a>
+        <h1 class="sidebar__title">Welcome back</h1>
+        <p class="sidebar__text">
+          Already a member, click on the button below to Sign in to continue
+          your benefits.
+        </p>
+        <a href="sign-in.html" class="sidebar__btn">Sign in</a>
+      </aside>
+      <div class="top-section">
+        <img
+          src="images/menu.svg"
+          alt="Sidebar open button"
+          class="sidebar__open"
+        />
+        <h1 class="logo">Banka</h1>
+      </div>
+      <form class="entry">
+        <input
+          class="entry__input"
+          type="text"
+          placeholder="Full Name"
+          name="fullName"
+          required
+        />
+        <input
+          class="entry__input"
+          type="tel"
+          placeholder="Phone_No"
+          name="phoneNo"
+          required
+        />
+        <input
+          class="entry__input"
+          type="text"
+          placeholder="Email"
+          name="email"
+          required
+        />
+        <input
+          class="entry__input"
+          type="password"
+          placeholder="Password"
+          name="password"
+          required
+        />
+        <button class="entry__btn btn">Join in</button>
+      </form>
+      <div class="switch">
+        <p>
+          Already a member?
+          <a href="sign-in.html" class="switch__link">Sign In</a>
+        </p>
+      </div>
+    </main>
+    <script src="./scripts/sidebar.js"></script>
+  </body>
+</html>

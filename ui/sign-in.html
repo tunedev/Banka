@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+    />
+    <link rel="stylesheet" href="css/main.css" />
+    <link
+      rel="shortcut icon"
+      href="images/banka-favicon.png"
+      type="image/x-icon"
+    />
+
+    <title>Sign in</title>
+  </head>
+  <body>
+    <main class="container__entry">
+      <aside class="sidebar">
+        <a class="sidebar__close">&times;</a>
+        <h1 class="sidebar__title">HELLO, Friend</h1>
+        <p class="sidebar__text">
+          Not yet a member, click on the button below to Join in the benefits.
+        </p>
+        <a href="join-in.html" class="sidebar__btn">Join In</a>
+      </aside>
+      <div class="top-section">
+        <img
+          src="images/menu.svg"
+          alt="Sidebar open button"
+          class="sidebar__open"
+        />
+        <h1 class="logo">Banka</h1>
+      </div>
+      <form class="entry">
+        <input
+          class="entry__input"
+          type="text"
+          placeholder="Email"
+          name="email"
+          required
+        />
+        <input
+          class="entry__input"
+          type="password"
+          placeholder="Password"
+          name="password"
+          required
+        />
+        <button class="entry__btn btn">Sign in</button>
+      </form>
+      <div class="switch">
+        <p>
+          Not yet a member?
+          <a href="join-in.html" class="switch__link">Join In</a>
+        </p>
+      </div>
+    </main>
+    <script src="./scripts/sidebar.js"></script>
+  </body>
+</html>
