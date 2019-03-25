@@ -38,10 +38,12 @@ body {
   background-attachment: fixed;
   margin: 0;
   padding: 7.5vh 0;
+  box-sizing: border-box;
   overflow: hidden;
 }
 
-.container__entry {
+.container__entry,
+.container {
   background: #fff;
   min-height: 85vh;
   width: 100%;
@@ -68,7 +70,6 @@ body {
   color: #fff;
   left: -200px;
   text-align: center;
-  padding: 1.5rem;
   box-sizing: border-box;
   transition: all 0.9s;
 }
@@ -185,13 +186,102 @@ body {
   text-transform: capitalize;
 }
 
+.content-title {
+  width: 100%;
+  margin: 0.5rem auto 3rem auto;
+  text-align: center;
+}
+
+.content-title__text {
+  font-size: 18px;
+  color: #888888;
+  text-transform: capitalize;
+}
+
+.summary-field {
+  display: grid;
+  grid-template-columns: 0.5fr 3fr 0.5fr;
+  margin: 5rem auto;
+  width: 80%;
+}
+
+.summary__nav {
+  width: 16px;
+  margin: 4.6rem auto;
+}
+
+.summary__nav:hover {
+  cursor: pointer;
+}
+
+.summary {
+  text-align: center;
+  text-transform: capitalize;
+  font-size: 1.3rem;
+}
+
+.sidebar--light {
+  background-color: #b8d5d4;
+}
+
+.sidebar--light .sidebar__close {
+  margin-bottom: 0;
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #fff;
+  margin: 0.2rem auto;
+}
+
+.user-name {
+  color: #000;
+  font-weight: 700;
+  margin: 0.5rem auto;
+  font-size: 16px;
+}
+
+.nav-container {
+  width: 100%;
+  margin-top: 5rem;
+  padding: 0;
+  box-sizing: border-box;
+  list-style: none;
+}
+
+.nav__link {
+  text-decoration: none;
+  color: #555555;
+  display: block;
+  padding: 0.5rem 3.7rem;
+  font-size: 12px;
+  text-transform: uppercase;
+  text-align: justify;
+}
+
+.nav__link:hover {
+  background: #fff;
+}
+
+.active {
+  background: #fff;
+  color: #33a19d;
+}
+
 @media only screen and (min-width: 768px) {
-  .container__entry {
-    background: #fff url('../images/bg.svg') no-repeat bottom right;
+  .container__entry,
+  .container {
     background-size: 40%;
-    min-width: 95%;
+    max-width: 90%;
     margin: auto;
     position: relative;
+    box-shadow: 3px 3px 20px;
+  }
+
+  .container__entry {
+    background: #fff url('../images/bg.svg') no-repeat bottom right;
   }
 
   .top-section {
@@ -204,7 +294,7 @@ body {
   }
 
   .sidebar {
-    width: 25%;
+    width: 20%;
     position: absolute;
     left: 0px;
   }
@@ -217,5 +307,13 @@ body {
   .entry__btn,
   .switch {
     width: 20%;
+  }
+
+  .avatar {
+    margin-top: 3rem;
+  }
+
+  .summary-field {
+    width: 40%;
   }
 }
