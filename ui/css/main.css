@@ -51,7 +51,8 @@ body {
   overflow-y: auto;
 }
 
-.sidebar__open {
+.sidebar__open,
+.nav__prev {
   justify-self: start;
   margin-top: 1.7rem;
   width: 24px;
@@ -128,7 +129,8 @@ body {
   font-size: 24px;
 }
 
-.top-section {
+.top-section,
+.top-section--no-sidebar {
   display: grid;
   grid-template-columns: 1fr 1fr;
   margin: 0.7rem auto;
@@ -350,7 +352,8 @@ body {
   height: 1.2rem;
 }
 
-.transaction {
+.transaction,
+.transaction-full {
   display: grid;
   grid-template-columns: 30% auto;
   background: #fff;
@@ -369,7 +372,8 @@ body {
 }
 
 .transaction__date,
-.transaction__details {
+.transaction__details,
+.transaction-full__date {
   color: #707070;
   font-size: 12px;
   text-align: justify;
@@ -406,6 +410,51 @@ body {
 .entry__input--remark {
   resize: none;
   height: 70px;
+}
+
+.nav__prev {
+  width: 32px;
+  align-self: auto;
+}
+
+.transaction-full {
+  grid-template-rows: 10% auto;
+  grid-template-columns: auto;
+  margin-top: 5rem;
+}
+
+.transaction-full__top {
+  display: grid;
+  grid-template-columns: auto;
+  justify-content: end;
+}
+
+.transaction-full__main {
+  display: grid;
+  grid-template-rows: repeat(3, auto);
+}
+
+.transaction-full__section {
+  display: grid;
+  grid-template-columns: 30% auto;
+}
+
+.transaction-full__title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #707070;
+  text-transform: capitalize;
+  align-self: start;
+}
+
+.transaction-full__title::after {
+  content: ':';
+}
+
+.transaction-full__body {
+  font-size: 12px;
+  font-weight: 400;
+  align-self: center;
 }
 
 @media only screen and (min-width: 768px) {
@@ -454,7 +503,8 @@ body {
   .content-title,
   .transaction,
   .entry-history,
-  .summary-field--mini {
+  .summary-field--mini,
+  .transaction-full {
     width: 40%;
     margin-left: 35%;
   }
@@ -471,5 +521,14 @@ body {
 
   ::-webkit-scrollbar {
     width: 20px;
+  }
+
+  .no-sidebar-page {
+    width: 40%;
+    margin-left: auto;
+  }
+
+  .transaction-full__body {
+    align-self: start;
   }
 }
