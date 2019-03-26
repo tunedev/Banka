@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+    />
+    <link rel="stylesheet" href="css/main.css" />
+    <link
+      rel="shortcut icon"
+      href="images/banka-favicon.png"
+      type="image/x-icon"
+    />
+
+    <title>Dashboard</title>
+  </head>
+  <body>
+    <main class="container">
+      <aside class="sidebar sidebar--light">
+        <a class="sidebar__close">&times;</a>
+        <div class="avatar"></div>
+        <h3 class="user-name">John Doe</h3>
+        <ul class="nav-container">
+          <li>
+            <a href="#" class="nav__link ">dashboard</a>
+          </li>
+          <li><a href="#" class="nav__link active">history</a></li>
+          <li><a href="#" class="nav__link">account</a></li>
+          <li><a href="#" class="nav__link">sign-out</a></li>
+        </ul>
+      </aside>
+      <div class="top-section">
+        <img
+          src="images/menu.svg"
+          alt="Sidebar open button"
+          class="sidebar__open"
+        />
+        <h1 class="logo">Banka</h1>
+      </div>
+      <div class="content-title">
+        <h1 class="content-title__text">transaction history</h1>
+      </div>
+      <div class="summary-field summary-field--mini">
+        <img
+          class="summary__nav summary__nav--mini"
+          src="images/left-arrow.svg"
+          alt="left arrow navigator"
+        />
+        <div class="summary summary--mini">
+          <div class="account-type">
+            <p class="summary__text--mini">
+              current account
+            </p>
+          </div>
+          <div class="account-number">
+            <p class="summary__text--mini">0005894789</p>
+          </div>
+          <div class="summary__bal--mini">
+            &#8358;
+            <span>0.00</span>
+          </div>
+        </div>
+        <img
+          class="summary__nav summary__nav--mini"
+          src="images/right-arrow.svg"
+          alt="right arrow navigator"
+        />
+      </div>
+      <form class="entry-history">
+        <input
+          placeholder="from"
+          name="from"
+          type="date"
+          class=" input-from entry-history__input"
+        />
+        <input
+          placeholder="to"
+          name="to"
+          type="date"
+          class="input-to entry-history__input"
+        />
+        <button class="entry-history__btn btn">reveal</button>
+      </form>
+      <a href="#" class="transaction">
+        <div class="transaction__col1">
+          <p class="transaction__amount">2000.00</p>
+          <p class="transaction__date">Mon, 12-Mar-2019</p>
+        </div>
+        <div class="transaction__col2">
+          <p class="transaction__details">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui amet
+          </p>
+        </div>
+      </a>
+      <a href="#" class="transaction">
+        <div class="transaction__col1">
+          <p class="transaction__amount">2000.00</p>
+          <p class="transaction__date">Mon, 12-Mar-2019</p>
+        </div>
+        <div class="transaction__col2">
+          <p class="transaction__details">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui amet
+          </p>
+        </div>
+      </a>
+      <a href="#" class="transaction">
+        <div class="transaction__col1">
+          <p class="transaction__amount">2000.00</p>
+          <p class="transaction__date">Mon, 12-Mar-2019</p>
+        </div>
+        <div class="transaction__col2">
+          <p class="transaction__details">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui amet
+          </p>
+        </div>
+      </a>
+      <a href="#" class="transaction">
+        <div class="transaction__col1">
+          <p class="transaction__amount">2000.00</p>
+          <p class="transaction__date">Mon, 12-Mar-2019</p>
+        </div>
+        <div class="transaction__col2">
+          <p class="transaction__details">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui amet
+          </p>
+        </div>
+      </a>
+    </main>
+    <script src="./scripts/sidebar.js"></script>
+  </body>
+</html>
