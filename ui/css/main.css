@@ -262,6 +262,7 @@ body {
 .nav {
   text-decoration: none;
   color: #555555;
+  background: rgba(255, 255, 255, 0.35);
   display: block;
   padding: 0.5rem 3.7rem;
   font-size: 12px;
@@ -276,6 +277,10 @@ body {
 .active {
   background: #fff;
   color: #33a19d;
+}
+
+.logout:hover {
+  color: red;
 }
 
 .summary-field--mini {
