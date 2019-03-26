@@ -15,7 +15,7 @@
       type="image/x-icon"
     />
 
-    <title>Dashboard</title>
+    <title>Deposit</title>
   </head>
   <body>
     <main class="container">
@@ -25,13 +25,11 @@
         <h3 class="user-name">John Doe</h3>
         <ul class="nav-container">
           <li>
-            <a href="#" class="nav active">dashboard</a>
+            <a href="#" class="nav ">dashboard</a>
           </li>
-          <li>
-            <a href="history.html" class="nav ">history</a>
-          </li>
-          <li><a href="#" class="nav  ">account</a></li>
-          <li><a href="#" class="nav  logout">sign-out</a></li>
+          <li><a href="#" class="nav active">deposit</a></li>
+          <li><a href="withdraw.html" class="nav">withdraw</a></li>
+          <li><a href="#" class="nav logout">sign-out</a></li>
         </ul>
       </aside>
       <div class="top-section">
@@ -43,32 +41,28 @@
         <h1 class="logo">Banka</h1>
       </div>
       <div class="content-title">
-        <h1 class="content-title__text">Account summary</h1>
+        <h1 class="content-title__text">deposit</h1>
       </div>
-      <div class="summary-field">
-        <img
-          class="summary__nav"
-          src="images/left-arrow.svg"
-          alt="left arrow navigator"
+
+      <form class="entry--closer entry">
+        <input
+          type="number"
+          class="entry__input entry__input--bigger"
+          placeholder="account number"
         />
-        <div class="summary">
-          <div class="account-type">
-            <p class="account-type__text">current account</p>
-          </div>
-          <div class="account-number">
-            <p class="account-number__text">0005894789</p>
-          </div>
-          <div class="account-balance">
-            &#8358;
-            <span class="account-balance__text">0.00</span>
-          </div>
-        </div>
-        <img
-          class="summary__nav"
-          src="images/right-arrow.svg"
-          alt="right arrow navigator"
+        <input
+          type="number"
+          class="entry__input entry-deposit__amount entry__input--bigger"
+          placeholder="amount"
         />
-      </div>
+        <textarea
+          class="entry__input entry__input--remark entry__input--bigger"
+          placeholder="remark"
+        ></textarea>
+        <button class="btn entry__btn entry__input--bigger">
+          validate deposit
+        </button>
+      </form>
     </main>
     <script src="./scripts/sidebar.js"></script>
   </body>
