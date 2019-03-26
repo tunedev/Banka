@@ -25,12 +25,12 @@
         <h3 class="user-name">John Doe</h3>
         <ul class="nav-container">
           <li>
-            <a href="#" class="nav active">dashboard</a>
+            <a href="dashboard.html" class="nav">dashboard</a>
           </li>
           <li>
             <a href="history.html" class="nav ">history</a>
           </li>
-          <li><a href="create-account.html" class="nav  ">account</a></li>
+          <li><a href="#" class="nav active ">account</a></li>
           <li><a href="#" class="nav  logout">sign-out</a></li>
         </ul>
       </aside>
@@ -43,32 +43,31 @@
         <h1 class="logo">Banka</h1>
       </div>
       <div class="content-title">
-        <h1 class="content-title__text">Account summary</h1>
+        <h1 class="content-title__text">create account</h1>
       </div>
-      <div class="summary-field">
-        <img
-          class="summary__nav"
-          src="images/left-arrow.svg"
-          alt="left arrow navigator"
+      <form class="entry--closer entry">
+        <input
+          type="text"
+          class="entry__input entry__input--bigger"
+          placeholder="account name"
         />
-        <div class="summary">
-          <div class="account-type">
-            <p class="account-type__text">current account</p>
-          </div>
-          <div class="account-number">
-            <p class="account-number__text">0005894789</p>
-          </div>
-          <div class="account-balance">
-            &#8358;
-            <span class="account-balance__text">0.00</span>
-          </div>
-        </div>
-        <img
-          class="summary__nav"
-          src="images/right-arrow.svg"
-          alt="right arrow navigator"
+        <select
+          name="account type"
+          class="entry__input--account-type entry__input entry__input--bigger"
+        >
+          <option disabled selected>Account Type</option>
+          <option value="current">current</option>
+          <option value="savings">savings</option>
+        </select>
+        <input
+          type="number"
+          class="entry__input entry-deposit__amount entry__input--bigger"
+          placeholder="account purpose"
         />
-      </div>
+        <button class="btn entry__btn entry__input--bigger">
+          await aproval
+        </button>
+      </form>
     </main>
     <script src="./scripts/sidebar.js"></script>
   </body>

@@ -337,6 +337,11 @@ body {
   cursor: pointer;
 }
 
+.entry__input--account-type {
+  box-sizing: content-box;
+  color: #000;
+}
+
 .input-from::before {
   content: 'from- ';
 }
