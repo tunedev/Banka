@@ -49,6 +49,7 @@ body {
   width: 100%;
   box-sizing: border-box;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .sidebar__open,
@@ -176,7 +177,8 @@ body {
 
 .btn:hover,
 .transaction:hover,
-::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover,
+.user:hover {
   opacity: 0.7;
   transform: scale(0.97);
   cursor: pointer;
@@ -246,11 +248,19 @@ body {
   margin: 0.2rem auto;
 }
 
+.avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
 .user-name {
   color: #000;
   font-weight: 700;
-  margin: 0.5rem auto;
-  font-size: 16px;
+  margin: 0.6rem auto;
+  font-size: 14px;
+  text-transform: capitalize;
+  text-align: center;
 }
 
 .nav-container {
@@ -358,7 +368,8 @@ body {
 }
 
 .transaction,
-.transaction-full {
+.transaction-full,
+.user {
   display: grid;
   grid-template-columns: 30% auto;
   background: #fff;
@@ -369,6 +380,7 @@ body {
   margin: 0.8rem auto;
   text-decoration: none;
   transition: all 0.5s;
+  color: #000;
 }
 
 .transaction__amount {
@@ -390,7 +402,7 @@ body {
 
 /* Styling scrollbar */
 ::-webkit-scrollbar {
-  width: 12px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
@@ -405,7 +417,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #b8d5d4;
+  background: #b8d5d5;
 }
 
 .entry--closer {
@@ -434,17 +446,20 @@ body {
   justify-content: end;
 }
 
-.transaction-full__main {
+.transaction-full__main,
+.user__bottom-section {
   display: grid;
   grid-template-rows: repeat(3, auto);
 }
 
-.transaction-full__section {
+.transaction-full__section,
+.user__info {
   display: grid;
-  grid-template-columns: 30% auto;
+  grid-template-columns: auto auto;
 }
 
-.transaction-full__title {
+.transaction-full__title,
+.user__info-title {
   font-size: 12px;
   font-weight: 700;
   color: #707070;
@@ -456,10 +471,70 @@ body {
   content: ':';
 }
 
-.transaction-full__body {
+.transaction-full__body,
+.user__info-body {
   font-size: 12px;
   font-weight: 400;
   align-self: center;
+}
+
+.top-section__admin {
+  display: grid;
+  grid-template-columns: auto;
+}
+
+.filter {
+  width: 100%;
+  display: block;
+  margin-top: 1.4rem;
+}
+
+.filter__entry {
+  display: block;
+  width: 80%;
+  margin: 0.3rem auto;
+  border-radius: 9px;
+  padding-left: 10px;
+  height: 30px;
+  border: 1px solid #707070;
+}
+
+.top-section-closer {
+  margin-top: 0.3rem;
+}
+
+.user__top-section {
+  margin-top: 1.2rem;
+}
+
+.list-container {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(auto-fit, minmax(300px, auto))
+  );
+  grid-gap: 30px;
+  width: 80%;
+  margin: 1.7rem auto;
+}
+
+.user {
+  grid-template-columns: auto;
+  grid-template-rows: 40% auto;
+  max-width: 3000px;
+  max-height: 290px;
+}
+
+.user__bottom-section {
+  margin-top: 1.2rem;
+}
+
+.user__info-title {
+  align-self: center;
+}
+
+.user__info-body {
+  justify-self: end;
 }
 
 @media only screen and (min-width: 768px) {
@@ -509,9 +584,14 @@ body {
   .transaction,
   .entry-history,
   .summary-field--mini,
-  .transaction-full {
+  .transaction-full,
+  .summary-field {
     width: 40%;
-    margin-left: 35%;
+    margin-left: 40%;
+  }
+
+  .transaction {
+    margin-left: 37%;
   }
 
   .entry__input--bigger {
@@ -524,8 +604,12 @@ body {
     font-size: 1.2rem;
   }
 
+  .entry--closer {
+    margin-left: 4%;
+  }
+
   ::-webkit-scrollbar {
-    width: 20px;
+    width: 12px;
   }
 
   .no-sidebar-page {
@@ -535,5 +619,39 @@ body {
 
   .transaction-full__body {
     align-self: start;
+  }
+
+  .top-section__admin {
+    grid-template-columns: auto 40%;
+  }
+
+  .filter__entry {
+    width: 40%;
+    margin-left: 40%;
+  }
+
+  .logo--admin {
+    margin-right: 4rem;
+  }
+
+  .user__top-section {
+    margin-top: 0.3rem;
+  }
+
+  .avatar--admin {
+    margin-top: 0.3rem;
+  }
+
+  .user__bottom-section {
+    margin-top: 0.5rem;
+  }
+
+  .list-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, auto));
+    grid-gap: 30px;
+    width: 70%;
+    margin-left: 24%;
+    justify-content: center;
   }
 }
