@@ -133,7 +133,7 @@ body {
 .top-section,
 .top-section--no-sidebar {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 20px 1fr;
   margin: 0.7rem auto;
   width: 80%;
 }
@@ -369,7 +369,9 @@ body {
 
 .transaction,
 .transaction-full,
-.user {
+.user,
+.user--action,
+.action-center {
   display: grid;
   grid-template-columns: 30% auto;
   background: #fff;
@@ -453,9 +455,14 @@ body {
 }
 
 .transaction-full__section,
-.user__info {
+.user__info,
+.action-center {
   display: grid;
   grid-template-columns: auto auto;
+}
+
+.transaction-full__section {
+  grid-template-columns: 40% 1fr;
 }
 
 .transaction-full__title,
@@ -518,7 +525,8 @@ body {
   margin: 1.7rem auto;
 }
 
-.user {
+.user,
+.user--action {
   grid-template-columns: auto;
   grid-template-rows: 40% auto;
   max-width: 3000px;
@@ -535,6 +543,58 @@ body {
 
 .user__info-body {
   justify-self: end;
+}
+
+.action-center {
+  grid-template-rows: auto;
+  grid-template-columns: 60% auto;
+}
+
+.account__info {
+  display: grid;
+  grid-template-columns: auto auto;
+  font-size: 12px;
+  color: #707070;
+}
+
+.account__info-title {
+  text-transform: capitalize;
+}
+
+.account__info-body {
+  color: #000;
+  justify-self: end;
+  align-self: baseline;
+}
+
+.action-center__right {
+  display: grid;
+  grid-template-rows: auto auto;
+}
+
+.action-center__btn {
+  width: 60%;
+  justify-self: center;
+  margin: auto;
+  height: 20px;
+  font-size: 8px;
+  color: #fff;
+}
+
+.btn-secondary {
+  background: #6d6868;
+}
+
+.btn-danger {
+  background: #e25a5a;
+}
+
+.status-active {
+  color: #3df279;
+}
+
+.status-dormant {
+  color: #e25a5a;
 }
 
 @media only screen and (min-width: 768px) {
@@ -653,5 +713,23 @@ body {
     width: 70%;
     margin-left: 24%;
     justify-content: center;
+  }
+
+  .action-center {
+    grid-template-columns: auto 50%;
+  }
+
+  .action-center__right {
+    grid-template-rows: auto;
+    grid-template-columns: auto auto;
+  }
+
+  .action-center__btn {
+    width: 40%;
+  }
+
+  .action-container {
+    width: 60%;
+    margin: auto;
   }
 }
