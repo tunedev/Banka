@@ -19,58 +19,41 @@
   </head>
   <body>
     <main class="container">
-      <aside class="sidebar sidebar--light">
-        <a class="sidebar__close">&times;</a>
-        <div class="avatar">
-          <img src="images/avatar5.png" alt="user picture" />
-        </div>
-        <h3 class="user-name">John Doe</h3>
-        <ul class="nav-container">
-          <li>
-            <a href="dashboard.html" class="nav">dashboard</a>
-          </li>
-          <li>
-            <a href="history.html" class="nav ">history</a>
-          </li>
-          <li><a href="#" class="nav active ">new account</a></li>
-          <li><a href="sign-in.html" class="nav  logout">sign-out</a></li>
-        </ul>
-      </aside>
       <div class="top-section">
-        <img
-          src="images/menu.svg"
-          alt="Sidebar open button"
-          class="sidebar__open"
-        />
+        <img class="sidebar__open" />
         <h1 class="logo">Banka</h1>
       </div>
       <div class="content-title">
-        <h1 class="content-title__text">create account</h1>
+        <h1 class="content-title__text">create staff account</h1>
       </div>
       <form class="entry--closer entry">
         <input
           type="text"
           class="entry__input entry__input--bigger"
-          placeholder="account name"
+          placeholder="full name"
+        />
+        <input
+          type="email"
+          class="entry__input entry__input--bigger"
+          placeholder="email"
         />
         <select
           name="account type"
           class="entry__input--account-type entry__input entry__input--bigger"
         >
-          <option disabled selected>Account Type</option>
-          <option value="current">current</option>
-          <option value="savings">savings</option>
+          <option disabled selected>staff category</option>
+          <option value="cashier">cashier</option>
+          <option value="staff-admin">staff-admin</option>
         </select>
         <input
-          type="text"
+          type="password"
           class="entry__input entry__input--bigger"
-          placeholder="account purpose"
+          placeholder="password"
         />
         <button class="btn entry__btn entry__input--bigger">
-          await aproval
+          create account
         </button>
       </form>
     </main>
-    <script src="./scripts/sidebar.js"></script>
   </body>
 </html>
