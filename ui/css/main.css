@@ -11,7 +11,8 @@ h2,
 h3,
 h4,
 h5,
-h6 {
+h6,
+.logo {
   font-family: 'Montserrat', sans-serif;
 }
 
@@ -124,10 +125,63 @@ body {
   transition: all 0.9s;
 }
 
-.logo {
+.section-wrapper {
+  display: grid;
+  grid-template-columns: auto;
+  width: 70%;
+  justify-content: center;
+  margin: 1rem auto;
+}
+
+.main-section {
+  margin: 2rem auto;
+  width: 80%;
+  color: #6d6868;
+}
+
+.logo,
+.logo--big {
   color: #33a19d;
   justify-self: end;
   font-size: 24px;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.logo--big {
+  font-size: 32px;
+}
+
+.first-text {
+  font-size: 18px;
+}
+
+.second-text {
+  font-size: 12px;
+}
+
+.cta {
+  display: inline-block;
+  width: 75%;
+  background: #00178f;
+  text-align: center;
+  color: #fafafa;
+  padding-top: 0.5rem;
+  text-decoration: none;
+  border-radius: 9px;
+  height: 30px;
+  margin-top: 1.5rem;
+  font-size: 14px;
+}
+
+.infograph-section {
+  width: 100%;
+  margin: 2rem auto;
+}
+
+.infograph {
+  width: 90%;
+  margin: 1rem auto;
 }
 
 .top-section,
@@ -178,7 +232,8 @@ body {
 .btn:hover,
 .transaction:hover,
 ::-webkit-scrollbar-thumb:hover,
-.user:hover {
+.user:hover,
+.cta:hover {
   opacity: 0.7;
   transform: scale(0.97);
   cursor: pointer;
@@ -199,7 +254,7 @@ body {
 }
 
 .content-title {
-  width: 80%;
+  width: 90%;
   margin: 0.5rem auto 0 auto;
   text-align: center;
 }
@@ -609,6 +664,7 @@ body {
 
   .container__entry {
     background: #fff url('../images/bg.svg') no-repeat bottom right;
+    background-size: 45%;
   }
 
   .top-section {
@@ -634,6 +690,15 @@ body {
   .entry__btn,
   .switch {
     width: 20%;
+  }
+
+  .entry {
+    margin: 3rem auto 0 10%;
+  }
+
+  .switch {
+    margin-left: 50.5%;
+    margin-top: 0;
   }
 
   .avatar {
@@ -731,5 +796,29 @@ body {
   .action-container {
     width: 60%;
     margin: auto;
+  }
+
+  .section-wrapper {
+    grid-template-columns: auto 50%;
+    width: 80%;
+    margin: 3rem auto;
+    justify-content: stretch;
+  }
+
+  .main-section {
+    width: 70%;
+  }
+
+  .cta {
+    width: 45%;
+  }
+
+  .infograph-section {
+    margin: auto;
+  }
+
+  .infograph {
+    width: 70%;
+    margin: 5rem 4rem;
   }
 }
