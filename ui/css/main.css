@@ -39,8 +39,16 @@ body {
   background-attachment: fixed;
   margin: 0;
   padding: 7.5vh 0;
-  box-sizing: border-box;
   overflow: hidden;
+}
+
+/* box-sizing: border-box */
+body,
+.container__entry,
+.container,
+.sidebar,
+.nav-container {
+  box-sizing: border-box;
 }
 
 .container__entry,
@@ -48,7 +56,6 @@ body {
   background: #fff;
   height: 85vh;
   width: 100%;
-  box-sizing: border-box;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -60,9 +67,30 @@ body {
   width: 24px;
 }
 
+/* cursor: pointer on hover */
 .sidebar__open:hover,
-.sidebar__close {
+.sidebar__close,
+.entry-history__input::-webkit-calendar-picker-indicator:hover,
+.summary__nav:hover {
   cursor: pointer;
+}
+
+/* Color #fff */
+.sidebar,
+.sidebar__close,
+.action-center__btn {
+  color: #fff;
+}
+
+/* text-align center */
+.sidebar,
+.cta,
+.btn,
+.content-title,
+.summary,
+.user-name,
+.transaction__details {
+  text-align: center;
 }
 
 /* side-bar for a mobile view */
@@ -71,20 +99,40 @@ body {
   background: #33a19d;
   height: 85vh;
   width: 200px;
-  color: #fff;
   left: -200px;
-  text-align: center;
-  box-sizing: border-box;
   transition: all 0.9s;
 }
 
-.sidebar__close {
-  color: #fff;
+/* text-decoration: none */
+.sidebar__close,
+.sidebar__btn,
+.logo,
+.cta,
+.switch__link,
+.nav,
+.transaction,
+.transaction-full,
+.user,
+.user--action,
+.action-center {
   text-decoration: none;
-  font-size: 32px;
+}
+
+/* display: block */
+.sidebar__close,
+.sidebar__btn,
+.entry__input,
+.entry__btn,
+.nav,
+.entry-history__btn,
+.filter,
+.filter__entry {
+  display: block;
+}
+
+.sidebar__close {
   font-weight: 400;
   text-align: end;
-  display: block;
   width: 95%;
   left: 0px;
 }
@@ -94,8 +142,25 @@ body {
   font-size: 18px;
 }
 
-.sidebar__text {
+/* Font-size: 12px; */
+.sidebar__text,
+.second-text,
+.switch,
+.nav,
+.summary__bal--mini,
+.transaction__amount,
+.transaction__date,
+.transaction__details,
+.transaction-full__date,
+.transaction-full__title,
+.user__info-title,
+.transaction-full__body,
+.user__info-body,
+.account__info {
   font-size: 12px;
+}
+
+.sidebar__text {
   margin: 2rem auto;
 }
 
@@ -110,8 +175,6 @@ body {
   color: #e8e8e8;
   transition: all 0.3s;
   font-size: 0.7rem;
-  display: block;
-  text-decoration: none;
 }
 
 .sidebar__btn:hover {
@@ -144,11 +207,15 @@ body {
   color: #33a19d;
   justify-self: end;
   font-size: 24px;
-  text-decoration: none;
   font-weight: 700;
 }
 
 .logo--big {
+  font-size: 50px;
+}
+
+/* Font size: 32px */
+.sidebar__close {
   font-size: 32px;
 }
 
@@ -156,18 +223,12 @@ body {
   font-size: 18px;
 }
 
-.second-text {
-  font-size: 12px;
-}
-
 .cta {
   display: inline-block;
   width: 75%;
   background: #00178f;
-  text-align: center;
   color: #fafafa;
   padding-top: 0.5rem;
-  text-decoration: none;
   border-radius: 9px;
   height: 30px;
   margin-top: 1.5rem;
@@ -179,9 +240,11 @@ body {
   margin: 2rem auto;
 }
 
-.infograph {
+.monitor {
   width: 90%;
   margin: 1rem auto;
+  animation: monitorIn 1s ease-in-out forwards;
+  opacity: 0;
 }
 
 .top-section,
@@ -199,7 +262,6 @@ body {
 
 .entry__input,
 .entry__btn {
-  display: block;
   padding-left: 10px;
   width: 55%;
   height: 30px;
@@ -220,11 +282,9 @@ body {
   box-sizing: content-box;
   background-color: #00178f;
   color: #ebebeb;
-  text-align: center;
   text-transform: uppercase;
   font-weight: 600;
   font-size: 0.7rem;
-  text-align: center;
   border-radius: 9px;
   transition: all 0.3s;
 }
@@ -244,19 +304,16 @@ body {
   color: #888888;
   width: 55%;
   margin: 0.5rem auto;
-  font-size: 12px;
 }
 
 .switch__link {
   color: #33a19d;
-  text-decoration: none;
   text-transform: capitalize;
 }
 
 .content-title {
   width: 90%;
   margin: 0.5rem auto 0 auto;
-  text-align: center;
 }
 
 .content-title__text {
@@ -277,12 +334,7 @@ body {
   margin: 4.6rem auto;
 }
 
-.summary__nav:hover {
-  cursor: pointer;
-}
-
 .summary {
-  text-align: center;
   text-transform: capitalize;
   font-size: 1.2rem;
 }
@@ -315,24 +367,19 @@ body {
   margin: 0.6rem auto;
   font-size: 14px;
   text-transform: capitalize;
-  text-align: center;
 }
 
 .nav-container {
   width: 100%;
   margin-top: 5rem;
   padding: 0;
-  box-sizing: border-box;
   list-style: none;
 }
 
 .nav {
-  text-decoration: none;
   color: #555555;
   background: rgba(255, 255, 255, 0.35);
-  display: block;
   padding: 0.5rem 3.7rem;
-  font-size: 12px;
   text-transform: uppercase;
   text-align: justify;
 }
@@ -365,10 +412,6 @@ body {
   margin: 2rem auto;
 }
 
-.summary__bal--mini {
-  font-size: 12px;
-}
-
 .entry-history {
   width: 80%;
   margin: 0.2rem auto;
@@ -398,10 +441,6 @@ body {
   opacity: 0;
 }
 
-.entry-history__input::-webkit-calendar-picker-indicator:hover {
-  cursor: pointer;
-}
-
 .entry__input--account-type {
   box-sizing: content-box;
   color: #000;
@@ -416,7 +455,6 @@ body {
 }
 
 .entry-history__btn {
-  display: block;
   width: 50%;
   margin: 1.5rem auto;
   height: 1.2rem;
@@ -435,26 +473,19 @@ body {
   padding: 0.3rem 1.5rem;
   width: 80%;
   margin: 0.8rem auto;
-  text-decoration: none;
   transition: all 0.5s;
   color: #000;
 }
 
 .transaction__amount {
   color: #000;
-  font-size: 12px;
 }
 
 .transaction__date,
 .transaction__details,
 .transaction-full__date {
   color: #707070;
-  font-size: 12px;
   text-align: justify;
-}
-
-.transaction__details {
-  text-align: center;
 }
 
 /* Styling scrollbar */
@@ -522,7 +553,6 @@ body {
 
 .transaction-full__title,
 .user__info-title {
-  font-size: 12px;
   font-weight: 700;
   color: #707070;
   text-transform: capitalize;
@@ -535,7 +565,6 @@ body {
 
 .transaction-full__body,
 .user__info-body {
-  font-size: 12px;
   font-weight: 400;
   align-self: center;
 }
@@ -547,12 +576,10 @@ body {
 
 .filter {
   width: 100%;
-  display: block;
   margin-top: 1.4rem;
 }
 
 .filter__entry {
-  display: block;
   width: 80%;
   margin: 0.3rem auto;
   border-radius: 9px;
@@ -608,7 +635,6 @@ body {
 .account__info {
   display: grid;
   grid-template-columns: auto auto;
-  font-size: 12px;
   color: #707070;
 }
 
@@ -633,7 +659,6 @@ body {
   margin: auto;
   height: 20px;
   font-size: 8px;
-  color: #fff;
 }
 
 .btn-secondary {
@@ -650,6 +675,17 @@ body {
 
 .status-dormant {
   color: #e25a5a;
+}
+
+@keyframes monitorIn {
+  from {
+    transform: translateY(-30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 @media only screen and (min-width: 768px) {
@@ -759,10 +795,7 @@ body {
     margin-right: 4rem;
   }
 
-  .user__top-section {
-    margin-top: 0.3rem;
-  }
-
+  .user__top-section,
   .avatar--admin {
     margin-top: 0.3rem;
   }
@@ -817,7 +850,7 @@ body {
     margin: auto;
   }
 
-  .infograph {
+  .monitor {
     width: 70%;
     margin: 5rem 4rem;
   }
