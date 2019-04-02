@@ -1,0 +1,38 @@
+{
+  "name": "Banka",
+  "version": "1.0.0",
+  "description": "lite bank app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/swisskid95/Banka.git"
+  },
+  "keywords": [
+    "Bank App",
+    "Bank",
+    "Money Transaction",
+    "Bank Account",
+    "Andela"
+  ],
+  "author": "Sanusi Babatunde",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/swisskid95/Banka/issues"
+  },
+  "homepage": "https://github.com/swisskid95/Banka#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.4.3",
+    "@babel/core": "^7.4.3",
+    "@babel/preset-env": "^7.4.3",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.16.0",
+    "prettier": "^1.16.4"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.4.3"
+  }
+}
