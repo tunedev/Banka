@@ -2,8 +2,7 @@ import expect from 'expect';
 import request from 'supertest';
 
 // local libraries
-import app from '../../server';
-import Users from '../../models/user.model';
+import app from '../server';
 
 describe('Post /api/v1/auth/signup', () => {
   const endpoint = '/api/v1/auth/signup';
@@ -26,14 +25,7 @@ describe('Post /api/v1/auth/signup', () => {
         expect(res.body.data.email).toBe(payload.email);
         expect(res.body.data).toIncludeKey('token');
       })
-      .end((err) => {
-        if (err) {
-          done(err);
-        }
-
-        expect(Users.find(user => user.email === payload.email).tokens.length).toBe(1);
-        done();
-      });
+      .end(done);
   });
 
   describe('# Edge cases', () => {
@@ -142,6 +134,84 @@ describe('Post /api/v1/auth/signup', () => {
         email: 'example1@mail.com',
       };
 
+      request(app)
+        .post(endpoint)
+        .send(payload)
+        .expect(400)
+        .expect((res) => {
+          expect(res.body).toIncludeKey('error');
+        })
+        .end(done);
+    });
+  });
+});
+
+describe('Post /api/v1/auth/signin', () => {
+  const endpoint = '/api/v1/auth/signin';
+
+  it('should signin to account and get a token', (done) => {
+    const payload = {
+      email: 'example1@mail.com',
+      password: 'password',
+    };
+    request(app)
+      .post(endpoint)
+      .send(payload)
+      .expect(201)
+      .expect((res) => {
+        expect(res.body.data).toIncludeKey('token');
+      })
+      .end(done);
+  });
+
+  describe('# Edge cases', () => {
+    it('should flag for invalid credentials', (done) => {
+      const payload = {
+        email: 'incorrect@mail.com',
+        password: 'password',
+      };
+      request(app)
+        .post(endpoint)
+        .send(payload)
+        .expect(401)
+        .expect((res) => {
+          expect(res.body).toIncludeKey('error');
+        })
+        .end(done);
+    });
+
+    it('should flag for invalid credentials', (done) => {
+      const payload = {
+        email: 'example1@mail.com',
+        password: 'incorrectpass',
+      };
+      request(app)
+        .post(endpoint)
+        .send(payload)
+        .expect(401)
+        .expect((res) => {
+          expect(res.body).toIncludeKey('error');
+        })
+        .end(done);
+    });
+
+    it('should flag for empty required field', (done) => {
+      const payload = {
+        password: 'password',
+      };
+      request(app)
+        .post(endpoint)
+        .send(payload)
+        .expect(400)
+        .expect((res) => {
+          expect(res.body).toIncludeKey('error');
+        })
+        .end(done);
+    });
+    it('should flag for empty required field', (done) => {
+      const payload = {
+        email: 'incorrect@mail.com',
+      };
       request(app)
         .post(endpoint)
         .send(payload)

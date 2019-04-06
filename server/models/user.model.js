@@ -5,7 +5,7 @@ const User = [
     firstName: 'John',
     lastName: 'Doe',
     phoneNumber: '09098887786',
-    password: 'jkisdfsdjnabifaewifkasdhfdaji',
+    password: 'password',
     type: 'client',
     isAdmin: null,
   },
