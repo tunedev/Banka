@@ -1,4 +1,4 @@
-import User from '../models/user.model';
+import Users from '../models/user.model';
 import Help from '../helper-functions/user.help';
 
 class UserController {
@@ -34,7 +34,28 @@ class UserController {
       status: 201,
       data: {
         token,
-        id: User.length,
+        id: Users.length,
+        firstName,
+        lastName,
+        email,
+      },
+    });
+  }
+
+  static async userSignin(req, res) {
+    const userDetails = Users.find(user => user.email === req.body.email);
+
+    const {
+      email, firstName, lastName, id,
+    } = userDetails;
+
+    const token = await Help.generateToken({ email, role: 'client' });
+
+    return res.status(201).json({
+      status: 201,
+      data: {
+        token,
+        id,
         firstName,
         lastName,
         email,

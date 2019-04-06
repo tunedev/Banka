@@ -1,4 +1,5 @@
 import Validate from '../../helper-functions/validation';
+import Users from '../../models/user.model';
 
 const validateSignup = (req, res, next) => {
   const {
@@ -67,4 +68,33 @@ const validateSignup = (req, res, next) => {
   next();
 };
 
-export default validateSignup;
+const validateSignin = (req, res, next) => {
+  const { email, password } = req.body;
+
+  const userDetails = Users.find(user => user.email === email);
+  const requiredNotGiven = Validate.requiredfieldIsGiven({ email, password });
+
+  if (requiredNotGiven) {
+    return res.status(400).json({
+      status: 400,
+      error: requiredNotGiven,
+    });
+  }
+
+  if (!userDetails) {
+    return res.status(401).json({
+      status: 401,
+      error: 'Email or password is wrong',
+    });
+  }
+
+  if (password !== userDetails.password) {
+    return res.status(401).json({
+      status: 401,
+      error: 'Email or password is wrong',
+    });
+  }
+  next();
+};
+
+export { validateSignup, validateSignin };
