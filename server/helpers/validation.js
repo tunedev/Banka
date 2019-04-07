@@ -1,7 +1,7 @@
 import validate from 'validate.js';
 import validator from 'validator';
 
-import Users from '../models/user.model';
+import Users from '../models/user';
 
 const generateIncorrectTypeErrMsg = (field, type) => `${field} should be a valid ${type} type, please ammend as appropriate`;
 
@@ -26,12 +26,10 @@ class Validate {
    * @returns message of the field required for the first field not provided
    * @memberof ValidateUser
    */
-  static requiredfieldIsGiven(input) {
+  static requiredFieldIsGiven(input) {
     const generateNotGivenErrMsg = field => `${field} required, please provide`;
 
     const inputPairs = Object.entries(input);
-
-    console.log(inputPairs.find(valuePairs => validate.isEmpty(valuePairs[1])));
 
     const wrongInput = inputPairs.find(valuePairs => validate.isEmpty(valuePairs[1]));
 

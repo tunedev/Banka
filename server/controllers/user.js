@@ -1,5 +1,6 @@
-import Users from '../models/user.model';
-import Help from '../helper-functions/user.help';
+import Users from '../models/user';
+import Auth from '../helpers/auth';
+import helper from '../helpers/user';
 
 class UserController {
   /**
@@ -16,11 +17,11 @@ class UserController {
     } = req.body;
     const type = 'client';
 
-    const token = await Help.generateToken({ email, type });
+    const token = await Auth.generateToken({ email, type });
 
-    const consealedPassword = await Help.hashPassword(password);
+    const consealedPassword = await helper.hashPassword(password);
 
-    Help.saveUser({
+    helper.saveUser({
       consealedPassword,
       email,
       firstName,
@@ -49,7 +50,7 @@ class UserController {
       email, firstName, lastName, id,
     } = userDetails;
 
-    const token = await Help.generateToken({ email, role: 'client' });
+    const token = await Auth.generateToken({ email, role: 'client' });
 
     return res.status(201).json({
       status: 201,

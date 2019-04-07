@@ -81,6 +81,3 @@ typings/
 
 # transpiled file
 dist/
-
-# remove ASAP
-server/test/accounts.spec.js

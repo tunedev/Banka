@@ -5,7 +5,8 @@ import logger from 'morgan';
 import dotEnv from 'dotenv';
 
 // Import routes
-import userRoutes from './routes/users.routes';
+import userRoutes from './routes/users';
+import accountsRoutes from './routes/accounts';
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Set up all routes
 app.use('/api/v1/auth', userRoutes);
+app.use('/api/v1/accounts', accountsRoutes);
 
 app.listen(port, () => {
   console.log(`Server running and listening on port ${port}`);

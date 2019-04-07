@@ -1,12 +1,12 @@
-import Validate from '../../helper-functions/validation';
-import Users from '../../models/user.model';
+import Validate from '../../helpers/validation';
+import Users from '../../models/user';
 
 const validateSignup = (req, res, next) => {
   const {
     firstName, lastName, email, phoneNumber, password,
   } = req.body;
 
-  const requiredNotGiven = Validate.requiredfieldIsGiven({
+  const requiredNotGiven = Validate.requiredFieldIsGiven({
     firstName,
     lastName,
     email,
@@ -72,7 +72,7 @@ const validateSignin = (req, res, next) => {
   const { email, password } = req.body;
 
   const userDetails = Users.find(user => user.email === email);
-  const requiredNotGiven = Validate.requiredfieldIsGiven({ email, password });
+  const requiredNotGiven = Validate.requiredFieldIsGiven({ email, password });
 
   if (requiredNotGiven) {
     return res.status(400).json({
