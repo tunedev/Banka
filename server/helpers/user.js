@@ -1,7 +1,6 @@
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
 
-import User from '../models/user.model';
+import User from '../models/user';
 
 class UserHelp {
   /**
@@ -46,12 +45,6 @@ class UserHelp {
     newUser.tokens = [{ id: 1, token }];
 
     User.push(newUser);
-  }
-
-  static async generateToken({ email, type }) {
-    return jwt.sign({ email, type }, process.env.SECRET_KEY, {
-      expiresIn: '2h',
-    });
   }
 }
 

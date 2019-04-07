@@ -152,7 +152,7 @@ describe('Post /api/v1/auth/signin', () => {
   it('should signin to account and get a token', (done) => {
     const payload = {
       email: 'example1@mail.com',
-      password: 'password',
+      password: 'password1',
     };
     request(app)
       .post(endpoint)
@@ -208,6 +208,7 @@ describe('Post /api/v1/auth/signin', () => {
         })
         .end(done);
     });
+
     it('should flag for empty required field', (done) => {
       const payload = {
         email: 'incorrect@mail.com',
