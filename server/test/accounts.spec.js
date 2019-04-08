@@ -69,7 +69,7 @@ describe('POST /api/v1/accounts', () => {
   });
 });
 
-describe('PATCH /api/v1/accounts/:accountNumber', () => {
+describe('account status toggle', () => {
   it("should toggle specified account number's from active to dormant", (done) => {
     request(app)
       .patch('/api/v1/accounts/2984756340')
@@ -93,6 +93,28 @@ describe('PATCH /api/v1/accounts/:accountNumber', () => {
   it('should flag that the specified account number does not exist', (done) => {
     request(app)
       .patch('/api/v1/accounts/12121212123984738471481')
+      .expect(404)
+      .expect((res) => {
+        expect(res.body).toIncludeKey('error');
+      })
+      .end(done);
+  });
+});
+
+describe('DELETE account route', () => {
+  it('should delete an account with specified account number', (done) => {
+    request(app)
+      .delete('/api/v1/accounts/1212334342')
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.message).toEqual('Account successfully deleted');
+      })
+      .end(done);
+  });
+
+  it('should flag for wrong account number', (done) => {
+    request(app)
+      .delete('/api/v1/accounts/12122212222321223')
       .expect(404)
       .expect((res) => {
         expect(res.body).toIncludeKey('error');

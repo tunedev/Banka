@@ -6,6 +6,7 @@ import accountValidation from '../middleware/validate/account';
 const router = express.Router();
 
 router.post('/', accountValidation.postAccount, accountController.postAccount);
-router.patch('/:accountNumber', accountValidation.patchAccount, accountController.patchAccount);
+router.patch('/:accountNumber', accountValidation.accountNumber, accountController.patchAccount);
+router.delete('/:accountNumber', accountValidation.accountNumber, accountController.deleteAccount);
 
 export default router;

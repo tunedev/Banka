@@ -3,6 +3,15 @@ import helper from '../helpers/account';
 import accounts from '../models/accounts';
 
 class AccountController {
+  /**
+   *handles the request to add a new account
+   *
+   * @static
+   * @param {object} req
+   * @param {object} res
+   * @returns new account details as a response
+   * @memberof AccountController
+   */
   static postAccount(req, res) {
     const { id, type } = req.body;
 
@@ -26,6 +35,15 @@ class AccountController {
     });
   }
 
+  /**
+   *handles the request to add toggle accounts status
+   *
+   * @static patchAccount
+   * @param {object} req
+   * @param {object} res
+   * @returns account number and accounts new status as a response
+   * @memberof AccountController
+   */
   static patchAccount(req, res) {
     const reqAccountNumber = parseInt(req.params.accountNumber, 10);
 
@@ -41,6 +59,17 @@ class AccountController {
         accountNumber,
         status,
       },
+    });
+  }
+
+  static deleteAccount(req, res) {
+    const reqAccountNumber = parseInt(req.params.accountNumber, 10);
+
+    helper.deleteAccount(reqAccountNumber);
+
+    return res.status(200).json({
+      status: 200,
+      message: 'Account successfully deleted',
     });
   }
 }

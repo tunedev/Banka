@@ -55,6 +55,19 @@ class AccountHelper {
 
     targetAccount.status = targetAccount.status === 'active' ? 'dormant' : 'active';
   }
+
+  /**
+   *helps delete an account with given account number from accounts record
+   *
+   * @static deleteAccount
+   * @param {object} accountNumber
+   * @memberof AccountHelper
+   */
+  static deleteAccount(accountNumber) {
+    const accountsIndex = accounts.findIndex(account => account.accountNumber === accountNumber);
+
+    accounts.splice(accountsIndex, 1);
+  }
 }
 
 export default AccountHelper;
