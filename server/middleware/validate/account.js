@@ -50,7 +50,7 @@ class ValidateAccount {
    * @returns error 404 if specified account number does not exist
    * @memberof ValidateAccount
    */
-  static patchAccount(req, res, next) {
+  static accountNumber(req, res, next) {
     const reqAccountNumber = parseInt(req.params.accountNumber, 10);
 
     const accountDetails = accounts.find(account => account.accountNumber === reqAccountNumber);
