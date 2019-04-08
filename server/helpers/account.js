@@ -24,6 +24,13 @@ class AccountHelper {
     return digitizeNumbers;
   }
 
+  /**
+   *helps save a new account in the accounts record
+   *
+   * @static saveAccount
+   * @param {object} { accountNumber, id, type }
+   * @memberof AccountHelper
+   */
   static saveAccount({ accountNumber, id, type }) {
     accounts.push({
       id: accounts.length + 1,
@@ -34,6 +41,19 @@ class AccountHelper {
       status: 'active',
       balance: 0,
     });
+  }
+
+  /**
+   *helps toggle the specified accounts number's status
+   *
+   * @static toggleAccountStatus
+   * @param {integer} accountNumber
+   * @memberof AccountHelper
+   */
+  static toggleAccountStatus(accountNumber) {
+    const targetAccount = accounts.find(account => account.accountNumber === accountNumber);
+
+    targetAccount.status = targetAccount.status === 'active' ? 'dormant' : 'active';
   }
 }
 

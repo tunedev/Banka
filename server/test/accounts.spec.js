@@ -68,3 +68,35 @@ describe('POST /api/v1/accounts', () => {
     });
   });
 });
+
+describe('PATCH /api/v1/accounts/:accountNumber', () => {
+  it("should toggle specified account number's from active to dormant", (done) => {
+    request(app)
+      .patch('/api/v1/accounts/2984756340')
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.data.status).toEqual('dormant');
+      })
+      .end(done);
+  });
+
+  it("should toggle the specified account number's status from dormant to active", (done) => {
+    request(app)
+      .patch('/api/v1/accounts/1212334342')
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.data.status).toEqual('active');
+      })
+      .end(done);
+  });
+
+  it('should flag that the specified account number does not exist', (done) => {
+    request(app)
+      .patch('/api/v1/accounts/12121212123984738471481')
+      .expect(404)
+      .expect((res) => {
+        expect(res.body).toIncludeKey('error');
+      })
+      .end(done);
+  });
+});

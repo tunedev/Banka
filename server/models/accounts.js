@@ -14,7 +14,7 @@ const accounts = [
     createdOn: new Date().toString(),
     owner: 2,
     type: 'current',
-    status: 'active',
+    status: 'dormant',
     balance: 32002.82,
   },
   {

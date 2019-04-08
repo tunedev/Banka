@@ -23,7 +23,7 @@ class Validate {
    *
    * @static
    * @param {object} input
-   * @returns message of the field required for the first field not provided
+   * @returns message of the field required for the first field not provided, and null otherwise
    * @memberof ValidateUser
    */
   static requiredFieldIsGiven(input) {
@@ -41,7 +41,7 @@ class Validate {
    *
    * @static validateStringtype
    * @param {object} input
-   * @returns error message indicating the first input that is not a string
+   * @returns error message indicating the first input that is not a string, and null if non is found
    * @memberof Validate
    */
   static stringType(input) {
@@ -57,7 +57,7 @@ class Validate {
    *
    * @static validateNumberType
    * @param {object} input
-   * @returns error message indicating the first input that is not a number
+   * @returns error message indicating the first input that is not an integer,and null otherwise
    * @memberof Validate
    */
   static numberType(input) {
@@ -84,6 +84,14 @@ class Validate {
     return wrongInput ? generateIncorrectTypeErrMsg(wrongInput[0], 'email') : null;
   }
 
+  /**
+   *helps check if input is a valid phone number format
+   *
+   * @static PhoneNumberValid
+   * @param {object} input
+   * @returns null if in put is a correct phone number format, and an error message otherwise
+   * @memberof Validate
+   */
   static phoneNumberValid(input) {
     const inputPairs = Object.entries(input);
 
@@ -98,6 +106,14 @@ class Validate {
       : null;
   }
 
+  /**
+   *helps check if input's length is greater or equal to 6
+   *
+   * @static minPasswordLength
+   * @param {object} input
+   * @returns null if input's length is 6 and above, and returns an error message otherwise
+   * @memberof Validate
+   */
   static minPasswordLength(input) {
     const inputPairs = Object.entries(input);
 
