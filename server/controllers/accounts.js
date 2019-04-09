@@ -1,6 +1,7 @@
 import users from '../models/user';
 import helper from '../helpers/account';
 import accounts from '../models/accounts';
+import transactions from '../models/transactions';
 
 class AccountController {
   /**
@@ -62,6 +63,15 @@ class AccountController {
     });
   }
 
+  /**
+   *handles request to api/v1/accounts/:accountNumber
+   *
+   * @static static deleteAccount
+   * @param {object} req
+   * @param {object} res
+   * @returns respose for successful request
+   * @memberof AccountController
+   */
   static deleteAccount(req, res) {
     const reqAccountNumber = parseInt(req.params.accountNumber, 10);
 
@@ -70,6 +80,45 @@ class AccountController {
     return res.status(200).json({
       status: 200,
       message: 'Account successfully deleted',
+    });
+  }
+
+  /**
+   *helps handle debit transaction and saves the transaction details in record
+   *
+   * @static postDebit
+   * @param {object} req
+   * @param {object} res
+   * @returns response with transaction details
+   * @memberof AccountController
+   */
+  static postDebit(req, res) {
+    const accountNumber = parseInt(req.params.accountNumber, 10);
+    const { amount, id } = req.body;
+
+    const transactionType = 'debit';
+
+    const { newBalance, oldBalance } = helper.debitAccount(accountNumber, amount);
+
+    helper.saveTransaction({
+      accountNumber,
+      amount,
+      transactionType,
+      cashierId: id,
+      oldBalance,
+      newBalance,
+    });
+
+    return res.status(201).json({
+      status: 201,
+      data: {
+        transactionId: transactions.length,
+        accountNumber,
+        amount,
+        cashier: id,
+        transactionType,
+        balance: newBalance,
+      },
     });
   }
 }

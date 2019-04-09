@@ -4,10 +4,11 @@
   "description": "lite bank app",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --require @babel/register ./server/test/*.spec.js --exit --watch",
+    "test": "mocha --require @babel/register ./server/test/*.spec.js --exit",
     "test-watch": "nodemon --exec \"npm test\"",
     "start": "node dist/server",
-    "build": "babel server --out-dir dist"
+    "build": "babel server --out-dir dist",
+    "devstart": "nodemon --exec babel-node server/server.js"
   },
   "repository": {
     "type": "git",

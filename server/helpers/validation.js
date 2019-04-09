@@ -2,6 +2,7 @@ import validate from 'validate.js';
 import validator from 'validator';
 
 import Users from '../models/user';
+import { getAccountDetails } from './account';
 
 const generateIncorrectTypeErrMsg = (field, type) => `${field} should be a valid ${type} type, please ammend as appropriate`;
 
@@ -41,7 +42,8 @@ class Validate {
    *
    * @static validateStringtype
    * @param {object} input
-   * @returns error message indicating the first input that is not a string, and null if non is found
+   * @returns error message indicating the first input that is not a
+    string, and null if non is found
    * @memberof Validate
    */
   static stringType(input) {
@@ -120,6 +122,21 @@ class Validate {
     const wrongInput = inputPairs.find(valuePairs => valuePairs[1].lengthc <= 6);
 
     return wrongInput ? `${wrongInput[0]}'s length should be 6 or above ` : null;
+  }
+
+  /**
+   *affirms if account to debit has sufficient funds for the debit
+   *
+   * @static isBalanceSufficient
+   * @param {integer} accountNumber
+   * @param {intefger} amount
+   * @returns true ofr false
+   * @memberof Validate
+   */
+  static isBalanceSufficient(accountNumber, amount) {
+    const account = getAccountDetails(accountNumber);
+
+    return account.balance >= amount;
   }
 }
 

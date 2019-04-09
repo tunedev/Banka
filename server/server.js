@@ -27,6 +27,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api/v1/auth', userRoutes);
 app.use('/api/v1/accounts', accountsRoutes);
 
+app.get('/', (req, res) => {
+  res.status(200).send('Welcome to Banka server');
+});
+
 app.listen(port, () => {
   console.log(`Server running and listening on port ${port}`);
 });

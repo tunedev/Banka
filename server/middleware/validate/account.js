@@ -63,6 +63,20 @@ class ValidateAccount {
     }
     next();
   }
+
+  static confirmSufficientBalance(req, res, next) {
+    const accountNumber = parseInt(req.params.accountNumber, 10);
+    const { amount } = req.body;
+
+    if (!helper.isBalanceSufficient(accountNumber, amount)) {
+      return res.status(400).json({
+        status: 400,
+        error: 'insufficient funds',
+      });
+    }
+
+    next();
+  }
 }
 
 export default ValidateAccount;
