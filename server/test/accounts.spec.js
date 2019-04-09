@@ -140,7 +140,7 @@ describe('POST /api/v1/accounts/:accountNumber/debit', () => {
       .end(done);
   });
 
-  it('should debit account', (done) => {
+  it('should flag for a non existing account number', (done) => {
     const payload = {
       id: 1,
       amount: 298.89,
@@ -162,6 +162,63 @@ describe('POST /api/v1/accounts/:accountNumber/debit', () => {
     };
     request(app)
       .post('/api/v1/accounts/1212334342/debit')
+      .send(payload)
+      .expect(400)
+      .expect((res) => {
+        expect(res.body).toIncludeKey('error');
+      })
+      .end(done);
+  });
+
+  it('should flag for required input not given', (done) => {
+    const payload = { id: 1 };
+    request(app)
+      .post('/api/v1/accounts/1212334342/credit')
+      .send(payload)
+      .expect(400)
+      .expect((res) => {
+        expect(res.body).toIncludeKey('error');
+      })
+      .end(done);
+  });
+});
+
+describe('POST /api/v1/accounts/:accountNumber/credit', () => {
+  it('should credit account', (done) => {
+    const payload = {
+      id: 1,
+      amount: 298.89,
+    };
+    request(app)
+      .post('/api/v1/accounts/1212334342/credit')
+      .send(payload)
+      .expect(201)
+      .expect((res) => {
+        expect(res.body.data).toIncludeKey('transactionType');
+        expect(res.body.data.transactionType).toEqual('credit');
+      })
+      .end(done);
+  });
+
+  it('flag for a non existing account number', (done) => {
+    const payload = {
+      id: 1,
+      amount: 298.89,
+    };
+    request(app)
+      .post('/api/v1/accounts/12123343421232/credit')
+      .send(payload)
+      .expect(404)
+      .expect((res) => {
+        expect(res.body).toIncludeKey('error');
+      })
+      .end(done);
+  });
+
+  it('should flag for required input not given', (done) => {
+    const payload = { id: 1 };
+    request(app)
+      .post('/api/v1/accounts/1212334342/credit')
       .send(payload)
       .expect(400)
       .expect((res) => {

@@ -11,8 +11,15 @@ router.delete('/:accountNumber', accountValidation.accountNumber, accountControl
 router.post(
   '/:accountNumber/debit',
   accountValidation.accountNumber,
+  accountValidation.transaction,
   accountValidation.confirmSufficientBalance,
   accountController.postDebit,
+);
+router.post(
+  '/:accountNumber/credit',
+  accountValidation.accountNumber,
+  accountValidation.transaction,
+  accountController.postCredit,
 );
 
 export default router;

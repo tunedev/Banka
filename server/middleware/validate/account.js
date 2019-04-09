@@ -2,6 +2,16 @@ import helper from '../../helpers/validation';
 import accounts from '../../models/accounts';
 
 class ValidateAccount {
+  /**
+   *validates the post request are all comformint to the criteria
+   *
+   * @static
+   * @param {object} req
+   * @param {object} res
+   * @param {function} next
+   * @returns error messages voilating the post account request criteria
+   * @memberof ValidateAccount
+   */
   static postAccount(req, res, next) {
     const { id, type } = req.body;
 
@@ -64,6 +74,16 @@ class ValidateAccount {
     next();
   }
 
+  /**
+   *validates that the account to debit has sufficient funds
+   *
+   * @static confirmSufficientBalance
+   * @param {object} req
+   * @param {object} res
+   * @param {function} next
+   * @returns error response for insufficient funds
+   * @memberof ValidateAccount
+   */
   static confirmSufficientBalance(req, res, next) {
     const accountNumber = parseInt(req.params.accountNumber, 10);
     const { amount } = req.body;
@@ -72,6 +92,31 @@ class ValidateAccount {
       return res.status(400).json({
         status: 400,
         error: 'insufficient funds',
+      });
+    }
+
+    next();
+  }
+
+  /**
+   *validates that required inputs are given
+   *
+   * @static transaction
+   * @param {object} req
+   * @param {object} res
+   * @param {function} next
+   * @returns response indicating input field not given
+   * @memberof ValidateAccount
+   */
+  static transaction(req, res, next) {
+    const { amount, id } = req.body;
+
+    const requiredNotGiven = helper.requiredFieldIsGiven({ id, amount });
+
+    if (requiredNotGiven) {
+      return res.status(400).json({
+        status: 400,
+        error: requiredNotGiven,
       });
     }
 

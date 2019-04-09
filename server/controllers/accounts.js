@@ -121,6 +121,45 @@ class AccountController {
       },
     });
   }
+
+  /**
+   *helps handle credit transaction and saves the transaction details in record
+   *
+   * @static postCredit
+   * @param {object} req
+   * @param {object} res
+   * @returns response with transaction details
+   * @memberof AccountController
+   */
+  static postCredit(req, res) {
+    const accountNumber = parseInt(req.params.accountNumber, 10);
+    const { amount, id } = req.body;
+
+    const transactionType = 'credit';
+
+    const { newBalance, oldBalance } = helper.creditAccount(accountNumber, amount);
+
+    helper.saveTransaction({
+      accountNumber,
+      amount,
+      transactionType,
+      cashierId: id,
+      oldBalance,
+      newBalance,
+    });
+
+    return res.status(201).json({
+      status: 201,
+      data: {
+        transactionId: transactions.length,
+        accountNumber,
+        amount,
+        cashier: id,
+        transactionType,
+        balance: newBalance,
+      },
+    });
+  }
 }
 
 export default AccountController;
