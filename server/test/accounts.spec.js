@@ -122,3 +122,51 @@ describe('DELETE account route', () => {
       .end(done);
   });
 });
+
+describe('POST /api/v1/accounts/:accountNumber/debit', () => {
+  it('should debit account', (done) => {
+    const payload = {
+      id: 1,
+      amount: 298.89,
+    };
+    request(app)
+      .post('/api/v1/accounts/1212334342/debit')
+      .send(payload)
+      .expect(201)
+      .expect((res) => {
+        expect(res.body.data).toIncludeKey('transactionType');
+        expect(res.body.data.transactionType).toEqual('debit');
+      })
+      .end(done);
+  });
+
+  it('should debit account', (done) => {
+    const payload = {
+      id: 1,
+      amount: 298.89,
+    };
+    request(app)
+      .post('/api/v1/accounts/12123343421232/debit')
+      .send(payload)
+      .expect(404)
+      .expect((res) => {
+        expect(res.body).toIncludeKey('error');
+      })
+      .end(done);
+  });
+
+  it('should flag for insufficient funds', (done) => {
+    const payload = {
+      id: 1,
+      amount: 2988934.89,
+    };
+    request(app)
+      .post('/api/v1/accounts/1212334342/debit')
+      .send(payload)
+      .expect(400)
+      .expect((res) => {
+        expect(res.body).toIncludeKey('error');
+      })
+      .end(done);
+  });
+});

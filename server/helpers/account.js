@@ -1,4 +1,8 @@
 import accounts from '../models/accounts';
+import transactions from '../models/transactions';
+
+// eslint-disable-next-line max-len
+export const getAccountDetails = accountNumber => accounts.find(account => account.accountNumber === accountNumber);
 
 class AccountHelper {
   /**
@@ -51,7 +55,7 @@ class AccountHelper {
    * @memberof AccountHelper
    */
   static toggleAccountStatus(accountNumber) {
-    const targetAccount = accounts.find(account => account.accountNumber === accountNumber);
+    const targetAccount = getAccountDetails(accountNumber);
 
     targetAccount.status = targetAccount.status === 'active' ? 'dormant' : 'active';
   }
@@ -64,9 +68,64 @@ class AccountHelper {
    * @memberof AccountHelper
    */
   static deleteAccount(accountNumber) {
-    const accountsIndex = accounts.findIndex(account => account.accountNumber === accountNumber);
+    const accountsIndex = getAccountDetails(accountNumber);
 
     accounts.splice(accountsIndex, 1);
+  }
+
+  /**
+   *helps debit account
+   *
+   * @static debit account
+   * @param {integer} accountNumber
+   * @param {integer} amount
+   * @returns an object of oldBalance and newBalance
+   * @memberof transactions
+   */
+  static debitAccount(accountNumber, amount) {
+    const accountToDebit = getAccountDetails(accountNumber);
+
+    const oldBalance = accountToDebit.balance;
+
+    accountToDebit.balance -= amount;
+
+    const newBalance = accountToDebit.balance.toFixed(2);
+
+    return {
+      oldBalance,
+      newBalance,
+    };
+  }
+
+  /**
+   *helps save new transaction in record
+   *
+   * @static saveTransaction
+   * @param {object} {
+   *     accountNumber, amount, transactionType, cashierId, oldBalance, newBalance,
+   *   }
+   * @memberof transactions
+   */
+  static saveTransaction({
+    accountNumber,
+    amount,
+    transactionType,
+    cashierId,
+    oldBalance,
+    newBalance,
+  }) {
+    const newTrasaction = {
+      transactionId: transactions.length,
+      createdOn: new Date().toString(),
+      transactionType,
+      accountNumber,
+      cashierId,
+      amount,
+      oldBalance,
+      newBalance,
+    };
+
+    transactions.push(newTrasaction);
   }
 }
 

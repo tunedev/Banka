@@ -8,5 +8,11 @@ const router = express.Router();
 router.post('/', accountValidation.postAccount, accountController.postAccount);
 router.patch('/:accountNumber', accountValidation.accountNumber, accountController.patchAccount);
 router.delete('/:accountNumber', accountValidation.accountNumber, accountController.deleteAccount);
+router.post(
+  '/:accountNumber/debit',
+  accountValidation.accountNumber,
+  accountValidation.confirmSufficientBalance,
+  accountController.postDebit,
+);
 
 export default router;
