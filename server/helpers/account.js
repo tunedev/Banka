@@ -4,13 +4,13 @@ import transactions from '../models/transactions';
 // eslint-disable-next-line max-len
 export const getAccountDetails = accountNumber => accounts.find(account => account.accountNumber === accountNumber);
 
-class AccountHelper {
+class AccountHelpers {
   /**
    *helps generate a new account
    *
    * @static generateAccountNumber
    * @returns a ten digit number
-   * @memberof AccountHelper
+   * @memberof AccountHelpers
    */
   static generateAccountNumber() {
     const numbers = [];
@@ -23,7 +23,7 @@ class AccountHelper {
 
     const digitizeNumbers = parseInt(numbers.join(''), 10);
 
-    if (record.includes(digitizeNumbers)) return AccountHelper.generateAccountNumber();
+    if (record.includes(digitizeNumbers)) return AccountHelpers.generateAccountNumber();
 
     return digitizeNumbers;
   }
@@ -33,7 +33,7 @@ class AccountHelper {
    *
    * @static saveAccount
    * @param {object} { accountNumber, id, type }
-   * @memberof AccountHelper
+   * @memberof AccountHelpers
    */
   static saveAccount({ accountNumber, id, type }) {
     accounts.push({
@@ -52,7 +52,7 @@ class AccountHelper {
    *
    * @static toggleAccountStatus
    * @param {integer} accountNumber
-   * @memberof AccountHelper
+   * @memberof AccountHelpers
    */
   static toggleAccountStatus(accountNumber) {
     const targetAccount = getAccountDetails(accountNumber);
@@ -65,7 +65,7 @@ class AccountHelper {
    *
    * @static deleteAccount
    * @param {object} accountNumber
-   * @memberof AccountHelper
+   * @memberof AccountHelpers
    */
   static deleteAccount(accountNumber) {
     const accountsIndex = getAccountDetails(accountNumber);
@@ -76,11 +76,11 @@ class AccountHelper {
   /**
    *helps debit account
    *
-   * @static debit account
+   * @static debitAccount
    * @param {integer} accountNumber
    * @param {integer} amount
    * @returns an object of oldBalance and newBalance
-   * @memberof transactions
+   * @memberof AccountHelpers
    */
   static debitAccount(accountNumber, amount) {
     const accountToDebit = getAccountDetails(accountNumber);
@@ -98,13 +98,37 @@ class AccountHelper {
   }
 
   /**
+   *helps credit account
+   *
+   * @static creditAccount
+   * @param {integer} accountNumber
+   * @param {integer} amount
+   * @returns an object of oldBalance and newBalance
+   * @memberof AccountHelpers
+   */
+  static creditAccount(accountNumber, amount) {
+    const accountToDebit = getAccountDetails(accountNumber);
+
+    const oldBalance = accountToDebit.balance;
+
+    accountToDebit.balance += amount;
+
+    const newBalance = accountToDebit.balance.toFixed(2);
+
+    return {
+      oldBalance,
+      newBalance,
+    };
+  }
+
+  /**
    *helps save new transaction in record
    *
    * @static saveTransaction
    * @param {object} {
    *     accountNumber, amount, transactionType, cashierId, oldBalance, newBalance,
    *   }
-   * @memberof transactions
+   * @memberof AccountHelpers
    */
   static saveTransaction({
     accountNumber,
@@ -129,4 +153,4 @@ class AccountHelper {
   }
 }
 
-export default AccountHelper;
+export default AccountHelpers;
