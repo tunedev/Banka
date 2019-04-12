@@ -1,7 +1,7 @@
 import validate from 'validate.js';
 import validator from 'validator';
 
-import Users from '../models/user';
+import Users from '../models/users';
 import { getAccountDetails } from './account';
 
 const generateIncorrectTypeErrMsg = (field, type) => `${field} should be a valid ${type} type, please ammend as appropriate`;

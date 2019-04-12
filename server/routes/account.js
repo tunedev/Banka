@@ -1,6 +1,6 @@
 import express from 'express';
 
-import accountController from '../controllers/accounts';
+import accountController from '../controllers/account';
 import accountValidation from '../middleware/validate/account';
 
 const router = express.Router();
