@@ -28,7 +28,7 @@ app.use('/api/v1/auth', userRoutes);
 app.use('/api/v1/accounts', accountsRoutes);
 
 app.get('/', (req, res) => {
-  res.status(200).send('Welcome to Banka server');
+  res.status(200).send('Welcome to Banka app');
 });
 
 app.listen(port, () => {

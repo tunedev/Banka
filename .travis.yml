@@ -1,0 +1,15 @@
+language: node_js
+node_js:
+  - "stable"
+cache:
+directories:
+  - "node_modules"
+install:
+  - npm install
+script:
+  - npm run test
+after_success: 
+— npm run coverage
+env: 
+global:
+- CODECLIMATE_REPO_TOKEN=e1f11e6154696c0d3c39678a34068f4468e57c07a45dd62d763ae3858233327b
