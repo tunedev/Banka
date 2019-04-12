@@ -5,8 +5,7 @@ import logger from 'morgan';
 import dotEnv from 'dotenv';
 
 // Import routes
-import userRoutes from './routes/users';
-import accountsRoutes from './routes/accounts';
+import routes from './routes';
 
 const app = express();
 
@@ -24,11 +23,29 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Set up all routes
-app.use('/api/v1/auth', userRoutes);
-app.use('/api/v1/accounts', accountsRoutes);
+app.use('/api/v1', routes);
 
 app.get('/', (req, res) => {
-  res.status(200).send('Welcome to Banka app');
+  res.status(200).json({
+    status: 200,
+    message: 'Welcome to Banka app',
+  });
+});
+
+app.all('*', (req, res) => {
+  res.status(404).json({
+    status: 404,
+    error: 'Specified endpoint does not exist yet',
+  });
+});
+
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
+  console.log(err.stack);
+  res.status(500).json({
+    status: 500,
+    err: 'Something broke',
+  });
 });
 
 app.listen(port, () => {

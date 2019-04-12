@@ -1,5 +1,5 @@
 import Validate from '../../helpers/validation';
-import Users from '../../models/user';
+import Users from '../../models/users';
 
 const validateSignup = (req, res, next) => {
   const {

@@ -1,4 +1,4 @@
-import users from '../models/user';
+import users from '../models/users';
 import helper from '../helpers/account';
 import accounts from '../models/accounts';
 import transactions from '../models/transactions';
