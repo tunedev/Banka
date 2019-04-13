@@ -1,5 +1,5 @@
-import expect from 'expect';
 import request from 'supertest';
+import expect from 'expect';
 
 // local libraries
 import app from '../server';
