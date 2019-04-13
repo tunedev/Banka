@@ -1,8 +1,12 @@
-import request from 'supertest';
-import expect from 'expect';
-
+// import request from 'supertest';
+// import expect from 'expect';
 // local libraries
-import app from '../server';
+// import app from '../server';
+
+const request = require('supertest');
+const expect = require('expect');
+
+const app = require('../server.js');
 
 describe('POST /api/v1/accounts', () => {
   const endpoint = '/api/v1/accounts';
