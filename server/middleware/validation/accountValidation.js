@@ -1,7 +1,7 @@
 import helper from '../../helpers/validation';
 import accounts from '../../models/accounts';
 
-class ValidateAccount {
+class AccountValidation {
   /**
    *validates the post request are all comformint to the criteria
    *
@@ -9,7 +9,7 @@ class ValidateAccount {
    * @param {object} req
    * @param {object} res
    * @param {function} next
-   * @returns error messages voilating the post account request criteria
+   * @returns error messages specific to the post account endpoint
    * @memberof ValidateAccount
    */
   static postAccount(req, res, next) {
@@ -124,4 +124,4 @@ class ValidateAccount {
   }
 }
 
-export default ValidateAccount;
+export default AccountValidation;

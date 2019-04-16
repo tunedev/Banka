@@ -1,13 +1,13 @@
 import bcrypt from 'bcryptjs';
 
-import User from '../models/users';
+import user from '../models/users';
 
-class UserHelp {
+class User {
   /**
-   *helps hash user password
+   *helps hash password
    *
    * @static hashPassword
-   @param {String} password
+   * @param {String} password
    * @memberof UserHelp
    */
   static hashPassword(password) {
@@ -32,7 +32,7 @@ class UserHelp {
     password, email, firstName, lastName, phoneNumber, type, token,
   }) {
     const newUser = {
-      id: User.length + 1,
+      id: user.length + 1,
       email,
       firstName,
       lastName,
@@ -44,8 +44,8 @@ class UserHelp {
 
     newUser.tokens = [{ id: 1, token }];
 
-    User.push(newUser);
+    user.push(newUser);
   }
 }
 
-export default UserHelp;
+export default User;

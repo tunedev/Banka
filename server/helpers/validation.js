@@ -6,7 +6,7 @@ import { getAccountDetails } from './account';
 
 const generateIncorrectTypeErrMsg = (field, type) => `${field} should be a valid ${type} type, please ammend as appropriate`;
 
-class Validate {
+class Validation {
   /**
    *helps affirm if new user's email has not being used
    *
@@ -140,4 +140,4 @@ class Validate {
   }
 }
 
-export default Validate;
+export default Validation;

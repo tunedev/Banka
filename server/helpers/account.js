@@ -4,7 +4,7 @@ import transactions from '../models/transactions';
 // eslint-disable-next-line max-len
 export const getAccountDetails = accountNumber => accounts.find(account => account.accountNumber === accountNumber);
 
-class AccountHelpers {
+class Account {
   /**
    *helps generate a new account
    *
@@ -23,7 +23,7 @@ class AccountHelpers {
 
     const digitizeNumbers = parseInt(numbers.join(''), 10);
 
-    if (record.includes(digitizeNumbers)) return AccountHelpers.generateAccountNumber();
+    if (record.includes(digitizeNumbers)) return Account.generateAccountNumber();
 
     return digitizeNumbers;
   }
@@ -153,4 +153,4 @@ class AccountHelpers {
   }
 }
 
-export default AccountHelpers;
+export default Account;
