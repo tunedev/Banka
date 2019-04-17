@@ -8,6 +8,7 @@ const User = [
     password: 'password1',
     type: 'client',
     isAdmin: false,
+    tokens: [],
   },
   {
     id: 2,
@@ -18,6 +19,7 @@ const User = [
     password: 'password2',
     type: 'client',
     isAdmin: false,
+    tokens: [],
   },
 ];
 
