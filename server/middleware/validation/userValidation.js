@@ -1,5 +1,5 @@
 import Validate from '../../helpers/validation';
-import Users from '../../models/users';
+import response from '../../helpers/response';
 
 class UserValidation {
   /**
@@ -26,10 +26,7 @@ class UserValidation {
     });
 
     if (requiredNotGiven) {
-      return res.status(400).json({
-        status: 400,
-        error: requiredNotGiven,
-      });
+      return response.error(res, 400, requiredNotGiven);
     }
 
     const isStringNotValid = Validate.stringType({
@@ -39,42 +36,21 @@ class UserValidation {
     });
 
     if (isStringNotValid) {
-      return res.status(400).json({
-        status: 400,
-        error: isStringNotValid,
-      });
+      return response.error(res, 400, isStringNotValid);
     }
 
     const isEmailNotValid = Validate.emailType({ email });
     if (isEmailNotValid) {
-      return res.status(400).json({
-        status: 400,
-        error: isEmailNotValid,
-      });
+      return response.error(res, 400, isEmailNotValid);
     }
 
     const isPasswordSecure = Validate.minPasswordLength({ password });
     if (isPasswordSecure) {
-      return res.status(400).json({
-        status: 400,
-        error: isPasswordSecure,
-      });
+      return response.error(res, 400, isPasswordSecure);
     }
 
     const isPhoneNumberNotValid = Validate.phoneNumberValid({ phoneNumber });
-    if (isPhoneNumberNotValid) {
-      return res.status(400).json({
-        status: 400,
-        error: isPhoneNumberNotValid,
-      });
-    }
-
-    if (!Validate.emailIsUnique(email)) {
-      return res.status(400).json({
-        status: 400,
-        error: `Account with email: ${email} already exists`,
-      });
-    }
+    if (isPhoneNumberNotValid) return response.error(res, 400, isPhoneNumberNotValid);
 
     next();
   }
@@ -92,29 +68,10 @@ class UserValidation {
   static validateSignin(req, res, next) {
     const { email, password } = req.body;
 
-    const userDetails = Users.find(user => user.email === email);
     const requiredNotGiven = Validate.requiredFieldIsGiven({ email, password });
 
-    if (requiredNotGiven) {
-      return res.status(400).json({
-        status: 400,
-        error: requiredNotGiven,
-      });
-    }
+    if (requiredNotGiven) return response.error(res, 400, requiredNotGiven);
 
-    if (!userDetails) {
-      return res.status(401).json({
-        status: 401,
-        error: 'Email or password is wrong',
-      });
-    }
-
-    if (password !== userDetails.password) {
-      return res.status(401).json({
-        status: 401,
-        error: 'Email or password is wrong',
-      });
-    }
     next();
   }
 }

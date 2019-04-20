@@ -1,44 +1,22 @@
-const transactions = [
-  {
-    id: 1,
-    createdOn: new Date('13 march, 2019').toString(),
-    transactionType: 'debit',
-    accountNumber: 1212334342,
-    cashierId: 2,
-    amount: 3000.0,
-    oldBalance: 9000.0,
-    newBalance: 6000.0,
-  },
-  {
-    id: 2,
-    createdOn: new Date('15 march, 2019').toString(),
-    transactionType: 'credit',
-    accountNumber: 2984756340,
-    cashierId: 1,
-    amount: 3000.0,
-    oldBalance: 9000.0,
-    newBalance: 12000.0,
-  },
-  {
-    id: 3,
-    createdOn: new Date('19 march, 2019').toString(),
-    transactionType: 'debit',
-    accountNumber: 1212334342,
-    cashierId: 2,
-    amount: 2000.0,
-    oldBalance: 6000.0,
-    newBalance: 4000.0,
-  },
-  {
-    id: 4,
-    createdOn: new Date('22 march, 2019').toString(),
-    transactionType: 'credit',
-    accountNumber: 1212334342,
-    cashierId: 2,
-    amount: 5000.0,
-    oldBalance: 4000.0,
-    newBalance: 9000.0,
-  },
-];
+import db from '../database/index';
 
-export default transactions;
+class Transactions {
+  static async save({
+    transactionType, accountNumber, cashierId, amount, oldBalance, newBalance,
+  }) {
+    const names = ['type', 'accountnumber', 'cashier', 'amount', 'oldbalance', 'newbalance'];
+    const params = [transactionType, accountNumber, cashierId, amount, oldBalance, newBalance];
+
+    try {
+      const result = await db.query(
+        `INSERT INTO transactions (${names.join(', ')}) VALUES($1, $2, $3, $4, $5, $6) RETURNING *`,
+        params,
+      );
+      return result.rows[0];
+    } catch (err) {
+      return err.code;
+    }
+  }
+}
+
+export default Transactions;

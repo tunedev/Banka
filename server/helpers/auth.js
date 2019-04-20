@@ -9,8 +9,8 @@ class Auth {
    * @returns
    * @memberof Auth
    */
-  static async generateToken({ email, type }) {
-    return jwt.sign({ email, type }, process.env.SECRET_KEY, {
+  static async generateToken({ id }) {
+    return jwt.sign({ id }, process.env.SECRET_KEY, {
       expiresIn: '2h',
     });
   }
