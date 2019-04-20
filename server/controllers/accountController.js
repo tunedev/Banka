@@ -1,7 +1,7 @@
 import users from '../models/users';
-import helper from '../helpers/account';
 import accounts from '../models/accounts';
 import transactions from '../models/transactions';
+import response from '../helpers/response';
 
 class AccountController {
   /**
@@ -13,26 +13,25 @@ class AccountController {
    * @returns new account details as a response
    * @memberof AccountController
    */
-  static postAccount(req, res) {
+  static async postAccount(req, res) {
     const { id, type } = req.body;
 
-    const userDetails = users.find(user => user.id === id);
+    const userDetails = await users.getById(id);
 
-    const { email, firstName, lastName } = userDetails;
+    if (!userDetails) return response.error(res, 404, 'user id specified does not exist');
 
-    const accountNumber = helper.generateAccountNumber();
+    const { email, firstname, lastname } = userDetails;
 
-    helper.saveAccount({ accountNumber, id, type });
+    const result = await accounts.save({ id, type });
 
-    return res.status(201).json({
-      status: 201,
-      data: {
-        accountNumber,
-        firstName,
-        lastName,
-        email,
-        type,
-      },
+    const { accountnumber } = result;
+
+    return response.success(res, 201, 'Account created successful', {
+      accountNumber: accountnumber,
+      firstName: firstname,
+      lastName: lastname,
+      email,
+      type,
     });
   }
 
@@ -45,22 +44,12 @@ class AccountController {
    * @returns account number and accounts new status as a response
    * @memberof AccountController
    */
-  static patchAccount(req, res) {
-    const reqAccountNumber = parseInt(req.params.accountNumber, 10);
+  static async patchAccount(req, res) {
+    const { accountNumber } = req.body;
 
-    helper.toggleAccountStatus(reqAccountNumber);
+    const result = await accounts.toggleStatus(accountNumber);
 
-    const accountDetails = accounts.find(account => account.accountNumber === reqAccountNumber);
-
-    const { status, accountNumber } = accountDetails;
-
-    return res.status(200).json({
-      status: 200,
-      data: {
-        accountNumber,
-        status,
-      },
-    });
+    return response.success(res, 200, 'Status toggled successfully', { ...result });
   }
 
   /**
@@ -72,15 +61,12 @@ class AccountController {
    * @returns respose for successful request
    * @memberof AccountController
    */
-  static deleteAccount(req, res) {
-    const reqAccountNumber = parseInt(req.params.accountNumber, 10);
+  static async deleteAccount(req, res) {
+    const { accountNumber } = req.body;
 
-    helper.deleteAccount(reqAccountNumber);
+    const result = await accounts.delete(accountNumber);
 
-    return res.status(200).json({
-      status: 200,
-      message: 'Account successfully deleted',
-    });
+    return response.success(res, 200, 'Account successfully deleted', { ...result });
   }
 
   /**
@@ -92,33 +78,35 @@ class AccountController {
    * @returns response with transaction details
    * @memberof AccountController
    */
-  static postDebit(req, res) {
-    const accountNumber = parseInt(req.params.accountNumber, 10);
-    const { amount, id } = req.body;
+  static async postDebit(req, res) {
+    const {
+      amount, id, oldBalance, accountNumber,
+    } = req.body;
 
     const transactionType = 'debit';
 
-    const { newBalance, oldBalance } = helper.debitAccount(accountNumber, amount);
+    const debitAccount = await accounts.debit(accountNumber, amount);
 
-    helper.saveTransaction({
-      accountNumber,
-      amount,
+    const newBalance = debitAccount.balance;
+
+    const result = await transactions.save({
       transactionType,
+      accountNumber,
       cashierId: id,
+      amount,
       oldBalance,
       newBalance,
     });
 
-    return res.status(201).json({
-      status: 201,
-      data: {
-        transactionId: transactions.length,
-        accountNumber,
-        amount,
-        cashier: id,
-        transactionType,
-        balance: newBalance,
-      },
+    if (result === '23503') return response.error(res, 400, 'cashier id does not match any in our record');
+
+    return response.success(res, 201, 'Account has been debited successfully', {
+      transactionId: result.id,
+      accountNumber,
+      amount,
+      cashier: id,
+      transactionType: result.type,
+      balance: newBalance,
     });
   }
 
@@ -131,33 +119,34 @@ class AccountController {
    * @returns response with transaction details
    * @memberof AccountController
    */
-  static postCredit(req, res) {
-    const accountNumber = parseInt(req.params.accountNumber, 10);
-    const { amount, id } = req.body;
+  static async postCredit(req, res) {
+    const {
+      amount, id, accountNumber, oldBalance,
+    } = req.body;
 
     const transactionType = 'credit';
 
-    const { newBalance, oldBalance } = helper.creditAccount(accountNumber, amount);
+    const creditAccount = await accounts.credit(accountNumber, amount);
 
-    helper.saveTransaction({
-      accountNumber,
-      amount,
+    const newBalance = creditAccount.balance;
+    const result = await transactions.save({
       transactionType,
+      accountNumber,
       cashierId: id,
+      amount,
       oldBalance,
       newBalance,
     });
 
-    return res.status(201).json({
-      status: 201,
-      data: {
-        transactionId: transactions.length,
-        accountNumber,
-        amount,
-        cashier: id,
-        transactionType,
-        balance: newBalance,
-      },
+    if (result === '23503') return response.error(res, 400, 'cashier id does not match any in our record');
+
+    return response.success(res, 201, 'Account has been credited successfully', {
+      transactionId: result.id,
+      accountNumber,
+      amount,
+      cashier: id,
+      transactionType: result.type,
+      balance: newBalance,
     });
   }
 }

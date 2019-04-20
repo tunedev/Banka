@@ -1,35 +1,34 @@
-import expect from 'expect';
-import request from 'supertest';
-
+import chai from 'chai';
+import chaihttp from 'chai-http';
 // local libraries
 import app from '../server';
+
+chai.use(chaihttp);
+const { expect, request } = chai;
 
 describe('Post /api/v1/auth/signup', () => {
   const endpoint = '/api/v1/auth/signup';
 
-  it('should create a new User', (done) => {
+  it('should create a new User', async () => {
     const payload = {
       password: 'passworded',
       firstName: 'John',
       lastName: 'Doe',
-      phoneNumber: '+23490988376',
-      email: 'johndoe@mail.com',
+      phoneNumber: '+2348100101054',
+      email: 'jnnyTest@mail.com',
     };
 
-    request(app)
+    const res = await request(app)
       .post(endpoint)
-      .send(payload)
-      .expect(201)
-      .expect((res) => {
-        expect(res.body.status).toBe(201);
-        expect(res.body.data.email).toBe(payload.email);
-        expect(res.body.data).toIncludeKey('token');
-      })
-      .end(done);
+      .send(payload);
+
+    expect(res).to.have.status(201);
+    expect(res.body.data.email).to.equal(payload.email);
+    expect(res.body.data).to.have.property('token');
   });
 
   describe('# Edge cases', () => {
-    it('should flag for missing field', (done) => {
+    it('should flag for missing field', async () => {
       const payload = {
         firstName: 'John',
         lastName: 'Doe',
@@ -37,17 +36,15 @@ describe('Post /api/v1/auth/signup', () => {
         email: 'johndoe@mail.com',
       };
 
-      request(app)
+      const res = await request(app)
         .post(endpoint)
-        .send(payload)
-        .expect(400)
-        .expect((res) => {
-          expect(res.body.error).toBeA('string');
-        })
-        .end(done);
+        .send(payload);
+
+      expect(res).to.have.status(400);
+      expect(res.body).to.have.property('error');
     });
 
-    it('should flag for wrong email format', (done) => {
+    it('should flag for wrong email format', async () => {
       const payload = {
         password: 'passworded',
         firstName: 'John',
@@ -56,38 +53,32 @@ describe('Post /api/v1/auth/signup', () => {
         email: 'johndoemail.com',
       };
 
-      request(app)
+      const res = await request(app)
         .post(endpoint)
-        .send(payload)
-        .expect(400)
-        .expect((res) => {
-          expect(res.body.error).toBe(
-            'email should be a valid email type, please ammend as appropriate',
-          );
-        })
-        .end(done);
+        .send(payload);
+
+      expect(res).to.have.status(400);
+      expect(res.body).to.have.property('error');
     });
 
-    it('should flag for duplicate mail', (done) => {
+    it('should flag for duplicate mail', async () => {
       const payload = {
         password: 'passworded',
         firstName: 'John',
         lastName: 'Doe',
         phoneNumber: '+23490988376',
-        email: 'example1@mail.com',
+        email: 'jnnyTest@mail.com',
       };
 
-      request(app)
+      const res = await request(app)
         .post(endpoint)
-        .send(payload)
-        .expect(400)
-        .expect((res) => {
-          expect(res.body).toIncludeKey('error');
-        })
-        .end(done);
+        .send(payload);
+
+      expect(res).to.have.status(400);
+      expect(res.body).to.have.property('error');
     });
 
-    it('should flag for qouted multiple space', (done) => {
+    it('should flag for qouted multiple space', async () => {
       const payload = {
         password: 'passworded',
         firstName: '    ',
@@ -96,36 +87,32 @@ describe('Post /api/v1/auth/signup', () => {
         email: 'example1@mail.com',
       };
 
-      request(app)
+      const res = await request(app)
         .post(endpoint)
-        .send(payload)
-        .expect(400)
-        .expect((res) => {
-          expect(res.body).toIncludeKey('error');
-        })
-        .end(done);
+        .send(payload);
+
+      expect(res).to.have.status(400);
+      expect(res.body).to.have.property('error');
     });
 
-    it('should flag for invalid phone number', (done) => {
+    it('should flag for invalid phone number', async () => {
       const payload = {
         password: 'passworded',
         firstName: 'John',
         lastName: 'Doe',
-        phoneNumber: '+90988376',
+        phoneNumber: '0988376',
         email: 'example1@mail.com',
       };
 
-      request(app)
+      const res = await request(app)
         .post(endpoint)
-        .send(payload)
-        .expect(400)
-        .expect((res) => {
-          expect(res.body).toIncludeKey('error');
-        })
-        .end(done);
+        .send(payload);
+
+      expect(res).to.have.status(400);
+      expect(res.body).to.have.property('error');
     });
 
-    it('should flag for password whose length is less than 6', (done) => {
+    it('should flag for password whose length is less than 6', async () => {
       const payload = {
         password: 'pas',
         firstName: 'John',
@@ -133,15 +120,12 @@ describe('Post /api/v1/auth/signup', () => {
         phoneNumber: '+23490988376',
         email: 'example1@mail.com',
       };
-
-      request(app)
+      const res = await request(app)
         .post(endpoint)
-        .send(payload)
-        .expect(400)
-        .expect((res) => {
-          expect(res.body).toIncludeKey('error');
-        })
-        .end(done);
+        .send(payload);
+
+      expect(res).to.have.status(400);
+      expect(res.body).to.have.property('error');
     });
   });
 });
@@ -149,78 +133,70 @@ describe('Post /api/v1/auth/signup', () => {
 describe('Post /api/v1/auth/signin', () => {
   const endpoint = '/api/v1/auth/signin';
 
-  it('should signin to account and get a token', (done) => {
+  it('should signin to account and get a token', async () => {
     const payload = {
-      email: 'example1@mail.com',
-      password: 'password1',
+      email: 'jnnyTest@mail.com',
+      password: 'passworded',
     };
-    request(app)
+
+    const res = await request(app)
       .post(endpoint)
-      .send(payload)
-      .expect(201)
-      .expect((res) => {
-        expect(res.body.data).toIncludeKey('token');
-      })
-      .end(done);
+      .send(payload);
+
+    expect(res).to.have.status(201);
+    expect(res.body.data.email).to.equal(payload.email);
+    expect(res.body.data).to.have.property('token');
   });
 
   describe('# Edge cases', () => {
-    it('should flag for invalid credentials', (done) => {
+    it('should flag for invalid credentials', async () => {
       const payload = {
         email: 'incorrect@mail.com',
         password: 'password',
       };
-      request(app)
+      const res = await request(app)
         .post(endpoint)
-        .send(payload)
-        .expect(401)
-        .expect((res) => {
-          expect(res.body).toIncludeKey('error');
-        })
-        .end(done);
+        .send(payload);
+
+      expect(res).to.have.status(401);
+      expect(res.body).to.have.property('error');
     });
 
-    it('should flag for invalid credentials', (done) => {
+    it('should flag for invalid credentials', async () => {
       const payload = {
         email: 'example1@mail.com',
         password: 'incorrectpass',
       };
-      request(app)
+      const res = await request(app)
         .post(endpoint)
-        .send(payload)
-        .expect(401)
-        .expect((res) => {
-          expect(res.body).toIncludeKey('error');
-        })
-        .end(done);
+        .send(payload);
+
+      expect(res).to.have.status(401);
+      expect(res.body).to.have.property('error');
     });
 
-    it('should flag for empty required field', (done) => {
+    it('should flag for empty required field', async () => {
       const payload = {
         password: 'password',
       };
-      request(app)
+      const res = await request(app)
         .post(endpoint)
-        .send(payload)
-        .expect(400)
-        .expect((res) => {
-          expect(res.body).toIncludeKey('error');
-        })
-        .end(done);
+        .send(payload);
+
+      expect(res).to.have.status(400);
+      expect(res.body).to.have.property('error');
     });
 
-    it('should flag for empty required field', (done) => {
+    it('should flag for empty required field', async () => {
       const payload = {
         email: 'incorrect@mail.com',
       };
-      request(app)
+      const res = await request(app)
         .post(endpoint)
-        .send(payload)
-        .expect(400)
-        .expect((res) => {
-          expect(res.body).toIncludeKey('error');
-        })
-        .end(done);
+        .send(payload);
+
+      expect(res).to.have.status(400);
+      expect(res.body).to.have.property('error');
     });
   });
 });

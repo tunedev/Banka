@@ -1,10 +1,11 @@
-import Users from '../models/users';
+import { encrypt, confirm } from '../helpers/encrypt';
+import users from '../models/users';
 import Auth from '../helpers/auth';
-import helper from '../helpers/user';
+import response from '../helpers/response';
 
 class UserController {
   /**
-   *takes care of client user signup
+   * Takes care of client user signup
    *
    * @static userSignup
    * @param {object} req
@@ -17,48 +18,49 @@ class UserController {
     } = req.body;
     const type = 'client';
 
-    const token = await Auth.generateToken({ email, type });
+    const consealedPassword = await encrypt(password, 8);
 
-    const consealedPassword = await helper.hashPassword(password);
-
-    helper.saveUser({
-      consealedPassword,
-      email,
+    // Save new user in database
+    const result = await users.saveUser({
       firstName,
       lastName,
+      email,
       phoneNumber,
+      consealedPassword,
       type,
-      token,
     });
 
-    return res.status(201).json({
-      status: 201,
-      data: {
-        token,
-        id: Users.length,
-        firstName,
-        lastName,
-        email,
-      },
-    });
+    if (result === '23505') return response.error(res, 400, 'Email already exist');
+
+    const { id } = result;
+
+    // Generate token for authentication
+    const token = await Auth.generateToken({ id });
+
+    return response.success(res, 201, 'You have signed up Successfully', { token, ...result });
   }
 
   static async userSignin(req, res) {
-    const userDetails = Users.find(user => user.email === req.body.email);
+    const userDetails = await users.getByEmail(req.body.email);
+
+    if (!userDetails) return response.error(res, 401, 'Wrong email and password');
 
     const {
-      email, firstName, lastName, id,
+      id, firstname, lastname, email, password,
     } = userDetails;
 
-    const token = await Auth.generateToken({ email, role: 'client' });
+    const isPasswordMatch = await confirm(req.body.password, password);
 
-    return res.status(201).json({
-      status: 201,
-      data: {
-        token,
+    if (!isPasswordMatch) return response.error(res, 401, 'Wrong email and password');
+
+    const token = await Auth.generateToken({ id });
+
+    return response.success(res, 201, 'You have signed in successfully', {
+      token,
+      ...{
         id,
-        firstName,
-        lastName,
+        firstname,
+        lastname,
         email,
       },
     });

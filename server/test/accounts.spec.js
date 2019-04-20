@@ -1,229 +1,201 @@
-import expect from 'expect';
-import request from 'supertest';
-
+import chai from 'chai';
+import chaihttp from 'chai-http';
 // local libraries
 import app from '../server';
+
+chai.use(chaihttp);
+const { expect, request } = chai;
+
+let testAccountNumber;
 
 describe('POST /api/v1/accounts', () => {
   const endpoint = '/api/v1/accounts';
 
-  it('should create new account', (done) => {
+  it('should create new account', async () => {
     const payload = {
       type: 'savings',
-      id: 1,
+      id: 4,
     };
-    request(app)
+    const res = await request(app)
       .post(endpoint)
-      .send(payload)
-      .expect(201)
-      .expect((res) => {
-        expect(res.body.data).toIncludeKey('accountNumber');
-      })
-      .end(done);
+      .send(payload);
+
+    expect(res.body.data).to.have.property('accountNumber');
+    expect(res).to.have.status(201);
+    testAccountNumber = res.body.data.accountNumber;
   });
 
   describe('# Edge cases', () => {
-    it('should flag for missing required field', (done) => {
+    it('should flag for missing required field', async () => {
       const payload = {
         id: 1,
       };
-      request(app)
+      const res = await request(app)
         .post(endpoint)
-        .send(payload)
-        .expect(400)
-        .expect((res) => {
-          expect(res.body).toIncludeKey('error');
-        })
-        .end(done);
+        .send(payload);
+      expect(res.body).to.have.property('error');
+      expect(res).to.have.status(400);
     });
 
-    it('should flag for wrong id', (done) => {
+    it('should flag for wrong id', async () => {
       const payload = {
         id: 829384,
         type: 'savings',
       };
-      request(app)
+      const res = await request(app)
         .post(endpoint)
-        .send(payload)
-        .expect(404)
-        .expect((res) => {
-          expect(res.body).toIncludeKey('error');
-        })
-        .end(done);
+        .send(payload);
+      expect(res).to.have.status(404);
+      expect(res.body).to.have.property('error');
     });
 
-    it('should flag for wrong account type', (done) => {
+    it('should flag for wrong account type', async () => {
       const payload = {
         id: 1,
         type: 'keepings',
       };
-      request(app)
+      const res = await request(app)
         .post(endpoint)
-        .send(payload)
-        .expect(400)
-        .expect((res) => {
-          expect(res.body).toIncludeKey('error');
-        })
-        .end(done);
+        .send(payload);
+      expect(res).to.have.status(400);
+      expect(res.body).to.have.property('error');
     });
   });
 });
 
 describe('account status toggle', () => {
-  it("should toggle specified account number's from active to dormant", (done) => {
-    request(app)
-      .patch('/api/v1/accounts/2984756340')
-      .expect(200)
-      .expect((res) => {
-        expect(res.body.data.status).toEqual('dormant');
-      })
-      .end(done);
+  it("should toggle specified account number's from active to dormant", async () => {
+    const res = await request(app).patch(`/api/v1/accounts/${testAccountNumber}`);
+
+    expect(res).to.have.status(200);
+    expect(res.body.data.status).to.equal('dormant');
   });
 
-  it("should toggle the specified account number's status from dormant to active", (done) => {
-    request(app)
-      .patch('/api/v1/accounts/1212334342')
-      .expect(200)
-      .expect((res) => {
-        expect(res.body.data.status).toEqual('active');
-      })
-      .end(done);
+  it("should toggle the specified account number's status from dormant to active", async () => {
+    const res = await request(app).patch(`/api/v1/accounts/${testAccountNumber}`);
+
+    expect(res).to.have.status(200);
+    expect(res.body.data.status).to.equal('active');
   });
 
-  it('should flag that the specified account number does not exist', (done) => {
-    request(app)
-      .patch('/api/v1/accounts/12121212123984738471481')
-      .expect(404)
-      .expect((res) => {
-        expect(res.body).toIncludeKey('error');
-      })
-      .end(done);
-  });
-});
+  it('should flag that the specified account number does not exist', async () => {
+    const res = await request(app).patch('/api/v1/accounts/12121212123984738471481');
 
-describe('DELETE account route', () => {
-  it('should delete an account with specified account number', (done) => {
-    request(app)
-      .delete('/api/v1/accounts/1212334342')
-      .expect(200)
-      .expect((res) => {
-        expect(res.body.message).toEqual('Account successfully deleted');
-      })
-      .end(done);
-  });
-
-  it('should flag for wrong account number', (done) => {
-    request(app)
-      .delete('/api/v1/accounts/12122212222321223')
-      .expect(404)
-      .expect((res) => {
-        expect(res.body).toIncludeKey('error');
-      })
-      .end(done);
-  });
-});
-
-describe('POST /api/v1/accounts/:accountNumber/debit', () => {
-  it('should debit account', (done) => {
-    const payload = {
-      id: 1,
-      amount: 298.89,
-    };
-    request(app)
-      .post('/api/v1/accounts/1212334342/debit')
-      .send(payload)
-      .expect(201)
-      .expect((res) => {
-        expect(res.body.data).toIncludeKey('transactionType');
-        expect(res.body.data.transactionType).toEqual('debit');
-      })
-      .end(done);
-  });
-
-  it('should flag for a non existing account number', (done) => {
-    const payload = {
-      id: 1,
-      amount: 298.89,
-    };
-    request(app)
-      .post('/api/v1/accounts/12123343421232/debit')
-      .send(payload)
-      .expect(404)
-      .expect((res) => {
-        expect(res.body).toIncludeKey('error');
-      })
-      .end(done);
-  });
-
-  it('should flag for insufficient funds', (done) => {
-    const payload = {
-      id: 1,
-      amount: 2988934.89,
-    };
-    request(app)
-      .post('/api/v1/accounts/1212334342/debit')
-      .send(payload)
-      .expect(400)
-      .expect((res) => {
-        expect(res.body).toIncludeKey('error');
-      })
-      .end(done);
-  });
-
-  it('should flag for required input not given', (done) => {
-    const payload = { id: 1 };
-    request(app)
-      .post('/api/v1/accounts/1212334342/credit')
-      .send(payload)
-      .expect(400)
-      .expect((res) => {
-        expect(res.body).toIncludeKey('error');
-      })
-      .end(done);
+    expect(res).to.have.status(404);
+    expect(res.body).to.have.property('error');
   });
 });
 
 describe('POST /api/v1/accounts/:accountNumber/credit', () => {
-  it('should credit account', (done) => {
+  it('should credit account', async () => {
     const payload = {
       id: 1,
-      amount: 298.89,
+      amount: 2000.0,
     };
-    request(app)
-      .post('/api/v1/accounts/1212334342/credit')
-      .send(payload)
-      .expect(201)
-      .expect((res) => {
-        expect(res.body.data).toIncludeKey('transactionType');
-        expect(res.body.data.transactionType).toEqual('credit');
-      })
-      .end(done);
+    const res = await request(app)
+      .post(`/api/v1/accounts/${testAccountNumber}/credit`)
+      .send(payload);
+
+    expect(res).to.have.status(201);
+    expect(res.body.data).to.have.property('transactionType');
   });
 
-  it('flag for a non existing account number', (done) => {
+  it('flag for a non existing account number', async () => {
     const payload = {
       id: 1,
       amount: 298.89,
     };
-    request(app)
+    const res = await request(app)
       .post('/api/v1/accounts/12123343421232/credit')
-      .send(payload)
-      .expect(404)
-      .expect((res) => {
-        expect(res.body).toIncludeKey('error');
-      })
-      .end(done);
+      .send(payload);
+
+    expect(res).to.have.status(404);
+    expect(res.body).to.have.property('error');
   });
 
-  it('should flag for required input not given', (done) => {
+  it('should flag for required input not given', async () => {
     const payload = { id: 1 };
+    const res = await request(app)
+      .post(`/api/v1/accounts/${testAccountNumber}/credit`)
+      .send(payload);
+
+    expect(res).to.have.status(400);
+    expect(res.body).to.have.property('error');
+  });
+});
+
+describe('POST /api/v1/accounts/:accountNumber/debit', () => {
+  before(() => {
+    const payload = {
+      id: 1,
+      amount: 2000.89,
+    };
     request(app)
-      .post('/api/v1/accounts/1212334342/credit')
-      .send(payload)
-      .expect(400)
-      .expect((res) => {
-        expect(res.body).toIncludeKey('error');
-      })
-      .end(done);
+      .post(`/api/v1/accounts/${testAccountNumber}/debit`)
+      .send(payload);
+  });
+  it('should debit account', async () => {
+    const payload = {
+      id: 1,
+      amount: 2000.89,
+    };
+    const res = await request(app)
+      .post(`/api/v1/accounts/${testAccountNumber}/credit`)
+      .send(payload);
+
+    expect(res).to.have.status(201);
+    expect(res.body.data).to.have.property('transactionType');
+  });
+
+  it('should flag for a non existing account number', async () => {
+    const payload = {
+      id: 1,
+      amount: 298.89,
+    };
+    const res = await request(app)
+      .post('/api/v1/accounts/12123343421232/debit')
+      .send(payload);
+
+    expect(res).to.have.status(404);
+    expect(res.body).to.have.property('error');
+  });
+
+  it('should flag for insufficient funds', async () => {
+    const payload = {
+      id: 1,
+      amount: 2988934.89,
+    };
+    const res = await request(app)
+      .post(`/api/v1/accounts/${testAccountNumber}/debit`)
+      .send(payload);
+
+    expect(res).to.have.status(400);
+    expect(res.body).to.have.property('error');
+  });
+
+  it('should flag for required input not given', async () => {
+    const payload = { id: 1 };
+    const res = await request(app)
+      .post(`/api/v1/accounts/${testAccountNumber}/debit`)
+      .send(payload);
+
+    expect(res).to.have.status(400);
+    expect(res.body).to.have.property('error');
+  });
+});
+
+describe('DELETE account route', () => {
+  it('should delete an account with specified account number', async () => {
+    const res = await request(app).delete(`/api/v1/accounts/${testAccountNumber}`);
+
+    expect(res).to.have.status(200);
+    expect(res.body).to.have.property('message');
+  });
+
+  it('should flag for wrong account number', async () => {
+    const res = await request(app).delete('/api/v1/accounts/12122212222321223');
+
+    expect(res).to.have.status(404);
+    expect(res.body).to.have.property('error');
   });
 });

@@ -1,11 +1,12 @@
 import helper from '../../helpers/validation';
 import accounts from '../../models/accounts';
+import response from '../../helpers/response';
 
 class AccountValidation {
   /**
-   *validates the post request are all comformint to the criteria
+   *validates that the post request are all comforming to the criteria
    *
-   * @static
+   * @static postAccount
    * @param {object} req
    * @param {object} res
    * @param {function} next
@@ -18,34 +19,16 @@ class AccountValidation {
     const requiredNotGiven = helper.requiredFieldIsGiven({ id, type });
 
     if (requiredNotGiven) {
-      return res.status(400).json({
-        status: 400,
-        error: requiredNotGiven,
-      });
-    }
-
-    const isUserIdInRecord = accounts.find(account => account.id === id);
-
-    if (!isUserIdInRecord) {
-      return res.status(404).json({
-        status: 404,
-        error: `user with id: ${id} does not exist in our record`,
-      });
+      return response.error(res, 400, requiredNotGiven);
     }
 
     const isNotString = helper.stringType({ type });
     if (isNotString) {
-      return res.status(400).json({
-        status: 400,
-        error: isNotString,
-      });
+      return response.error(res, 400, isNotString);
     }
 
     if (type.toLowerCase() !== 'savings' && type.toLowerCase() !== 'current') {
-      return res.status(400).json({
-        status: 400,
-        error: 'Account type must either be savings or current',
-      });
+      return response.error(res, 400, 'Account type can either be "savings" or "current"');
     }
     next();
   }
@@ -60,17 +43,17 @@ class AccountValidation {
    * @returns error 404 if specified account number does not exist
    * @memberof ValidateAccount
    */
-  static accountNumber(req, res, next) {
-    const reqAccountNumber = parseInt(req.params.accountNumber, 10);
+  static async accountNumber(req, res, next) {
+    const accountNumber = parseInt(req.params.accountNumber, 10);
 
-    const accountDetails = accounts.find(account => account.accountNumber === reqAccountNumber);
+    const accountDetails = await accounts.findByAccountNumber(accountNumber);
 
-    if (!accountDetails) {
-      return res.status(404).json({
-        status: 404,
-        error: 'specified account does not exist',
-      });
+    if (!accountDetails || accountDetails === '22P02') {
+      return response.error(res, 404, 'Specified account number does not exist yet');
     }
+
+    req.body.accountNumber = accountNumber;
+    req.body.oldBalance = accountDetails.balance;
     next();
   }
 
@@ -84,16 +67,14 @@ class AccountValidation {
    * @returns error response for insufficient funds
    * @memberof ValidateAccount
    */
-  static confirmSufficientBalance(req, res, next) {
+  static async confirmSufficientBalance(req, res, next) {
     const accountNumber = parseInt(req.params.accountNumber, 10);
     const { amount } = req.body;
 
-    if (!helper.isBalanceSufficient(accountNumber, amount)) {
-      return res.status(400).json({
-        status: 400,
-        error: 'insufficient funds',
-      });
-    }
+    const accountDetails = await accounts.findByAccountNumber(accountNumber);
+    const { balance } = accountDetails;
+
+    if (balance < amount) return response.error(res, 400, 'Account balance is not sufficient');
 
     next();
   }
@@ -114,10 +95,7 @@ class AccountValidation {
     const requiredNotGiven = helper.requiredFieldIsGiven({ id, amount });
 
     if (requiredNotGiven) {
-      return res.status(400).json({
-        status: 400,
-        error: requiredNotGiven,
-      });
+      return response.error(res, 400, requiredNotGiven);
     }
 
     next();

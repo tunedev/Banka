@@ -1,24 +1,9 @@
 import validate from 'validate.js';
 import validator from 'validator';
 
-import Users from '../models/users';
-import { getAccountDetails } from './account';
-
 const generateIncorrectTypeErrMsg = (field, type) => `${field} should be a valid ${type} type, please ammend as appropriate`;
 
 class Validation {
-  /**
-   *helps affirm if new user's email has not being used
-   *
-   * @static ensureUniqueEmail
-   * @param {string} email
-   * @returns true if user email is unique and false otherwise
-   * @memberof AuthenticateUser
-   */
-  static emailIsUnique(email) {
-    return !Users.find(user => user.email === email);
-  }
-
   /**
    *helps handle required input field
    *
@@ -97,15 +82,9 @@ class Validation {
   static phoneNumberValid(input) {
     const inputPairs = Object.entries(input);
 
-    const wrongInput = inputPairs.find(valuePairs => validator.isMobilePhone(
-      valuePairs[1],
-      [...validator.isMobilePhoneLocales],
-      [{ strictMode: true }],
-    ));
+    const wrongInput = inputPairs.find(valuePairs => !validator.isMobilePhone(valuePairs[1]));
 
-    return wrongInput
-      ? `${generateIncorrectTypeErrMsg(wrongInput[0], 'phone Number')}add the country code`
-      : null;
+    return wrongInput ? `${generateIncorrectTypeErrMsg(wrongInput[0], 'phone Number')}` : null;
   }
 
   /**
@@ -119,24 +98,9 @@ class Validation {
   static minPasswordLength(input) {
     const inputPairs = Object.entries(input);
 
-    const wrongInput = inputPairs.find(valuePairs => valuePairs[1].lengthc <= 6);
+    const wrongInput = inputPairs.find(valuePairs => valuePairs[1].length <= 6);
 
     return wrongInput ? `${wrongInput[0]}'s length should be 6 or above ` : null;
-  }
-
-  /**
-   *affirms if account to debit has sufficient funds for the debit
-   *
-   * @static isBalanceSufficient
-   * @param {integer} accountNumber
-   * @param {intefger} amount
-   * @returns true ofr false
-   * @memberof Validate
-   */
-  static isBalanceSufficient(accountNumber, amount) {
-    const account = getAccountDetails(accountNumber);
-
-    return account.balance >= amount;
   }
 }
 
