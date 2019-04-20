@@ -48,7 +48,14 @@ class AccountValidation {
 
     const accountDetails = await accounts.findByAccountNumber(accountNumber);
 
-    if (!accountDetails || accountDetails === '22P02') {
+    // Checks if account with account number specified exists
+    /*
+     * Error code "22P02" handles wrong input type
+     * Error code "22003" handles case of numeric value out of range
+     */
+    if (accountDetails === '22P02') return response.error(res, 400, 'Account number should be a number');
+
+    if (!accountDetails || accountDetails === '22003') {
       return response.error(res, 404, 'Specified account number does not exist yet');
     }
 
