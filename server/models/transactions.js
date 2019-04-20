@@ -1,6 +1,16 @@
 import db from '../database/index';
 
 class Transactions {
+  /**
+   *saves transaction to database
+   *
+   * @static save
+   * @param {object} {
+   *     transactionType, accountNumber, cashierId, amount, oldBalance, newBalance,
+   *   }
+   * @returns transations details
+   * @memberof Transactions
+   */
   static async save({
     transactionType, accountNumber, cashierId, amount, oldBalance, newBalance,
   }) {
@@ -13,6 +23,17 @@ class Transactions {
         params,
       );
       return result.rows[0];
+    } catch (err) {
+      return err.code;
+    }
+  }
+
+  static async getByAccountNumber(accountnumber) {
+    try {
+      const result = await db.query('SELECT * FROM transactions WHERE accountnumber = $1', [
+        accountnumber,
+      ]);
+      return result.rows;
     } catch (err) {
       return err.code;
     }

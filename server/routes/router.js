@@ -41,6 +41,11 @@ router
     accountValidation.accountNumber,
     accountValidation.transaction,
     accountController.postCredit,
+  )
+  .get(
+    '/accounts/:accountNumber/transactions',
+    accountValidation.accountNumber,
+    accountController.getAllTransactions,
   );
 
 export default router;

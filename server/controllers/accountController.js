@@ -149,6 +149,14 @@ class AccountController {
       balance: newBalance,
     });
   }
+
+  static async getAllTransactions(req, res) {
+    const { accountNumber } = req.body;
+
+    const result = await transactions.getByAccountNumber(accountNumber);
+
+    return response.success(res, 200, 'Transactions have been gotten successfully', [...result]);
+  }
 }
 
 export default AccountController;
