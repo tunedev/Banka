@@ -46,6 +46,11 @@ router
     '/accounts/:accountNumber/transactions',
     accountValidation.accountNumber,
     accountController.getAllTransactions,
+  )
+  .get(
+    '/accounts/:accountNumber/transactions/:id',
+    accountValidation.accountNumber,
+    accountController.getSpecificTransaction,
   );
 
 export default router;

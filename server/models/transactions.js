@@ -28,12 +28,32 @@ class Transactions {
     }
   }
 
+  /**
+   *Gets transaction with specified account number
+   *
+   * @static getByAccountNumber
+   * @param {number} accountnumber
+   * @returns an array of all transactions with account number
+   * @memberof Transactions
+   */
   static async getByAccountNumber(accountnumber) {
     try {
       const result = await db.query('SELECT * FROM transactions WHERE accountnumber = $1', [
         accountnumber,
       ]);
       return result.rows;
+    } catch (err) {
+      return err.code;
+    }
+  }
+
+  static async getByAccountNumberAndId(accountnumber, id) {
+    try {
+      const result = await db.query(
+        'SELECT * FROM transactions WHERE accountnumber = $1 AND id = $2',
+        [accountnumber, id],
+      );
+      return result.rows[0];
     } catch (err) {
       return err.code;
     }
