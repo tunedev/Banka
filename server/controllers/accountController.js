@@ -205,6 +205,20 @@ class AccountController {
 
     return response.success(res, 200, 'Successful', result);
   }
+
+  /**
+   *Handles request made to get all acounts endpoint
+   *
+   * @static getAllAccount
+   * @param {object} req
+   * @param {object} res
+   * @memberof AccountController
+   */
+  static async getAllAccounts(req, res) {
+    const result = await accounts.getAll();
+
+    response.success(res, 200, 'successful', result);
+  }
 }
 
 export default AccountController;
