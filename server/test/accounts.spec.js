@@ -63,6 +63,31 @@ describe('POST create new account', () => {
   });
 });
 
+describe('get specific account', () => {
+  it("should return specified accountNumber's details", async () => {
+    const res = await request(app).get(`/api/v1/accounts/${testAccountNumber}`);
+
+    expect(res).to.have.status(200);
+    expect(res.body.data.accountnumber).to.equal(testAccountNumber);
+  });
+
+  describe('# Edge cases', () => {
+    it('should flag that the specified account number does not exist', async () => {
+      const res = await request(app).get('/api/v1/accounts/12121212121212121');
+
+      expect(res).to.have.status(404);
+      expect(res.body).to.have.property('error');
+    });
+
+    it('should correctly tell that account number is not a number type', async () => {
+      const res = await request(app).get('/api/v1/accounts/wrongaccounttype/transactions');
+
+      expect(res).to.have.status(400);
+      expect(res.body).to.have.property('error');
+    });
+  });
+});
+
 describe('PATCH account status toggle', () => {
   it("should toggle specified account number's from active to dormant", async () => {
     const res = await request(app).patch(`/api/v1/accounts/${testAccountNumber}`);
@@ -87,7 +112,7 @@ describe('PATCH account status toggle', () => {
     });
 
     it('should correctly tell that account number is not a number type', async () => {
-      const res = await request(app).get('/api/v1/accounts/wrongaccounttype/transactions');
+      const res = await request(app).patch('/api/v1/accounts/wrongaccounttype');
 
       expect(res).to.have.status(400);
       expect(res.body).to.have.property('error');
@@ -134,7 +159,14 @@ describe('POST a credit transaction on an account', () => {
     });
 
     it('should correctly tell that account number is not a number type', async () => {
-      const res = await request(app).get('/api/v1/accounts/wrongaccounttype/transactions');
+      const payload = {
+        id: 1,
+        amount: 298.89,
+      };
+
+      const res = await request(app)
+        .post('/api/v1/accounts/wrongaccounttype/credit')
+        .send(payload);
 
       expect(res).to.have.status(400);
       expect(res.body).to.have.property('error');
@@ -194,7 +226,14 @@ describe('POST a debit transaction on an account', () => {
     });
 
     it('should correctly tell that account number is not a number type', async () => {
-      const res = await request(app).get('/api/v1/accounts/wrongaccounttype/transactions');
+      const payload = {
+        id: 1,
+        amount: 298.89,
+      };
+
+      const res = await request(app)
+        .post('/api/v1/accounts/wrongaccounttype/debit')
+        .send(payload);
 
       expect(res).to.have.status(400);
       expect(res.body).to.have.property('error');
@@ -293,7 +332,7 @@ describe('DELETE an account', () => {
     });
 
     it('should correctly tell that account number is not a number type', async () => {
-      const res = await request(app).get('/api/v1/accounts/wrongaccounttype/transactions');
+      const res = await request(app).delete('/api/v1/accounts/wrongaccounttype');
 
       expect(res).to.have.status(400);
       expect(res.body).to.have.property('error');

@@ -36,6 +36,11 @@ router
     accountValidation.accountNumber,
     accountController.deleteAccount,
   )
+  .get(
+    '/accounts/:accountNumber',
+    accountValidation.accountNumber,
+    accountController.getSpecificAccount,
+  )
   .post(
     '/accounts/:accountNumber/debit',
     accountValidation.accountNumber,
