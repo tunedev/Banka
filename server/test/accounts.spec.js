@@ -65,6 +65,15 @@ describe('POST create new account', () => {
 
 describe('get specific account', () => {
   it("should return specified accountNumber's details", async () => {
+    const res = await request(app).get('/api/v1/accounts');
+
+    expect(res).to.have.status(200);
+    expect(res.body).to.have.property('data');
+  });
+});
+
+describe('get specific account', () => {
+  it("should return specified accountNumber's details", async () => {
     const res = await request(app).get(`/api/v1/accounts/${testAccountNumber}`);
 
     expect(res).to.have.status(200);

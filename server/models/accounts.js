@@ -15,6 +15,22 @@ const generateAccountNumber = () => {
 
 class Accounts {
   /**
+   *Gets all accounts in record
+   *
+   * @static getAll
+   * @returns an array of all accounts in record
+   * @memberof Accounts
+   */
+  static async getAll() {
+    try {
+      const result = await db.queryNoParams('SELECT * FROM accounts ORDER BY id');
+      return result.rows;
+    } catch (err) {
+      return err.code;
+    }
+  }
+
+  /**
    *Save new account to the accounts table
    *
    * @static saveAccount
