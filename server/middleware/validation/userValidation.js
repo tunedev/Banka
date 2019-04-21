@@ -40,6 +40,11 @@ class UserValidation {
       return response.error(res, 400, isStringNotValid);
     }
 
+    const isNotText = Validate.textType({ firstName, lastName });
+    if (isNotText) {
+      return response.error(res, 400, isNotText);
+    }
+
     const isEmailNotValid = Validate.emailType({ email });
     if (isEmailNotValid) {
       return response.error(res, 400, isEmailNotValid);

@@ -63,12 +63,28 @@ describe('POST create new account', () => {
   });
 });
 
-describe('get specific account', () => {
+describe('get all account', () => {
   it("should return specified accountNumber's details", async () => {
     const res = await request(app).get('/api/v1/accounts');
 
     expect(res).to.have.status(200);
     expect(res.body).to.have.property('data');
+  });
+
+  describe('# Edge cases', () => {
+    it('should flag for wrong status value', async () => {
+      const res = await request(app).get('/api/v1/accounts?status=oimsnt');
+
+      expect(res).to.have.status(400);
+      expect(res.body).to.have.property('error');
+    });
+
+    it('should flag for incorrect type', async () => {
+      const res = await request(app).get('/api/v1/accounts?status=1212113');
+
+      expect(res).to.have.status(400);
+      expect(res.body).to.have.property('error');
+    });
   });
 });
 
@@ -105,11 +121,46 @@ describe('PATCH account status toggle', () => {
     expect(res.body.data.status).to.equal('dormant');
   });
 
+  it('should return specified account with specified status', async () => {
+    const res = await request(app).get('/api/v1/accounts?status=dormant');
+
+    expect(res).to.have.status(200);
+    expect(res.body.data[0].status).to.equal('dormant');
+  });
+
+  it('should return empty array', async () => {
+    const res = await request(app).get('/api/v1/accounts?status=active');
+
+    expect(res).to.have.status(200);
+    expect(res.body.data.length).to.equal(0);
+  });
+
   it("should toggle the specified account number's status from dormant to active", async () => {
     const res = await request(app).patch(`/api/v1/accounts/${testAccountNumber}`);
 
     expect(res).to.have.status(200);
     expect(res.body.data.status).to.equal('active');
+  });
+
+  it('should return specified account with specified status', async () => {
+    const res = await request(app).get('/api/v1/accounts?status=active');
+
+    expect(res).to.have.status(200);
+    expect(res.body.data[0].status).to.equal('active');
+  });
+
+  it('should return empty array', async () => {
+    const res = await request(app).get('/api/v1/accounts?status=dormant');
+
+    expect(res).to.have.status(200);
+    expect(res.body.data.length).to.equal(0);
+  });
+
+  it("should toggle specified account number's from active to dormant", async () => {
+    const res = await request(app).patch(`/api/v1/accounts/${testAccountNumber}`);
+
+    expect(res).to.have.status(200);
+    expect(res.body.data.status).to.equal('dormant');
   });
 
   describe('# Edge cases', () => {

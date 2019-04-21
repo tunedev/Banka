@@ -15,7 +15,7 @@ const generateAccountNumber = () => {
 
 class Accounts {
   /**
-   *Gets all accounts in record
+   * Gets all accounts in record
    *
    * @static getAll
    * @returns an array of all accounts in record
@@ -31,7 +31,7 @@ class Accounts {
   }
 
   /**
-   *Save new account to the accounts table
+   * Save new account to the accounts table
    *
    * @static saveAccount
    * @param {object} { id, type }
@@ -49,12 +49,12 @@ class Accounts {
       );
       return result.rows[0];
     } catch (err) {
-      return err.stack;
+      return err.code;
     }
   }
 
   /**
-   *finds account details with specified account number
+   * Finds account details with specified account number
    *
    * @static findByAccountNumber
    * @param {integer} accountnumber
@@ -73,7 +73,7 @@ class Accounts {
   }
 
   /**
-   *toggles the accounts status from dormant to active and vice versa
+   * Toggles the accounts status from dormant to active and vice versa
    *
    * @static toggleStatus
    * @param {integer} accountnumber
@@ -91,12 +91,12 @@ class Accounts {
       );
       return result.rows[0];
     } catch (err) {
-      return err.stack;
+      return err.code;
     }
   }
 
   /**
-   *delete account with specified account number
+   * Delete account with specified account number
    *
    * @static delete
    * @param {integer} accountnumber
@@ -111,10 +111,19 @@ class Accounts {
       );
       return result.rows[0];
     } catch (err) {
-      return err.stack;
+      return err.code;
     }
   }
 
+  /**
+   * Performs debit on account in record
+   *
+   * @static debit
+   * @param {object} accountnumber
+   * @param {object} amount
+   * @returns
+   * @memberof Accounts
+   */
   static async debit(accountnumber, amount) {
     try {
       const result = await db.query(
@@ -123,10 +132,19 @@ class Accounts {
       );
       return result.rows[0];
     } catch (err) {
-      return err.stack;
+      return err.code;
     }
   }
 
+  /**
+   * Performs credit on account in record
+   *
+   * @static credit
+   * @param {object} accountnumber
+   * @param {object} amount
+   * @returns
+   * @memberof Accounts
+   */
   static async credit(accountnumber, amount) {
     try {
       const result = await db.query(
@@ -135,16 +153,33 @@ class Accounts {
       );
       return result.rows[0];
     } catch (err) {
-      return err.stack;
+      return err.code;
     }
   }
 
+  /**
+   * Gets account owned by specified user id
+   *
+   * @static getByOwner
+   * @param {integer} ownerId
+   * @returns
+   * @memberof Accounts
+   */
   static async getByOwner(ownerId) {
     try {
       const result = await db.query('SELECT * FROM accounts WHERE owner = $1', [ownerId]);
       return result.rows;
     } catch (err) {
-      return err.stack;
+      return err.code;
+    }
+  }
+
+  static async getByStatus(status) {
+    try {
+      const result = await db.query('SELECT * FROM accounts WHERE status = $1', [status]);
+      return result.rows;
+    } catch (err) {
+      return err.code;
     }
   }
 }

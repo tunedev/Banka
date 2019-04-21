@@ -107,6 +107,25 @@ class AccountValidation {
 
     next();
   }
+
+  static getAccounts(req, res, next) {
+    const { status } = req.query;
+
+    if (status) {
+      const isNotText = helper.textType({ status });
+      if (isNotText) {
+        return response.error(res, 400, 'Status value expected string');
+      }
+
+      const statusLowCased = status.toLowerCase();
+      req.query.status = statusLowCased;
+
+      if (statusLowCased !== 'dormant' && statusLowCased !== 'active') {
+        return response.error(res, 400, "Status query's value should either be active or dormant");
+      }
+    }
+    next();
+  }
 }
 
 export default AccountValidation;
