@@ -150,12 +150,43 @@ class AccountController {
     });
   }
 
+  /**
+   *Handles Get request for all transaction done on an account
+   *
+   * @static getAllTransactions
+   * @param {object} req
+   * @param {object} res
+   * @returns an array of accounts transaction as a response with a message
+   * @memberof AccountController
+   */
   static async getAllTransactions(req, res) {
     const { accountNumber } = req.body;
 
     const result = await transactions.getByAccountNumber(accountNumber);
 
-    return response.success(res, 200, 'Transactions have been gotten successfully', [...result]);
+    return response.success(res, 200, 'Transactions have been gotten successfully', result);
+  }
+
+  /**
+   *Handles get request for a specific transaction on an account
+   *
+   * @static getSpecificTransaction
+   * @param {object} req
+   * @param {object} res
+   * @returns the transaction with the specified id
+   * @memberof AccountController
+   */
+  static async getSpecificTransaction(req, res) {
+    const { accountNumber } = req.body;
+    const id = parseInt(req.params.id, 10);
+
+    const result = await transactions.getByAccountNumberAndId(accountNumber, id);
+
+    if (!result) return response.error(res, 404, 'Transaction with specified id does not exist');
+
+    if (result === '22P02') return response.error(res, 400, 'Id should be an Integer type');
+
+    return response.success(res, 200, 'Transaction gotten successfully', result);
   }
 }
 

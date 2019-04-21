@@ -227,6 +227,55 @@ describe('Get all transactions made on an account', () => {
   });
 });
 
+describe('GET specific transaction', () => {
+  it('should get transaction first transaction', async () => {
+    const id = 1;
+
+    const res = await request(app).get(`/api/v1/accounts/${testAccountNumber}/transactions/${id}`);
+
+    expect(res).to.have.status(200);
+    expect(res.body.data.id).to.equal(id);
+  });
+
+  describe('# Edge cases', () => {
+    it('should flag for wrong account number', async () => {
+      const res = await request(app).get('/api/v1/accounts/12121212121212121212/transactions/1');
+
+      expect(res).to.have.status(404);
+      expect(res.body).to.have.property('error');
+    });
+
+    it('should correctly tell that account number is not a number type', async () => {
+      const res = await request(app).get('/api/v1/accounts/wrongaccounttype/transactions/1');
+
+      expect(res).to.have.status(400);
+      expect(res.body).to.have.property('error');
+    });
+
+    it('it should flag for non existing transaction id', async () => {
+      const id = 12;
+
+      const res = await request(app).get(
+        `/api/v1/accounts/${testAccountNumber}/transactions/${id}`,
+      );
+
+      expect(res).to.have.status(404);
+      expect(res.body).to.have.property('error');
+    });
+
+    it('it should flag for wrong id type', async () => {
+      const id = 'wrongType';
+
+      const res = await request(app).get(
+        `/api/v1/accounts/${testAccountNumber}/transactions/${id}`,
+      );
+
+      expect(res).to.have.status(400);
+      expect(res.body).to.have.property('error');
+    });
+  });
+});
+
 describe('DELETE an account', () => {
   it('should delete an account with specified account number', async () => {
     const res = await request(app).delete(`/api/v1/accounts/${testAccountNumber}`);
