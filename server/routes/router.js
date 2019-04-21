@@ -11,10 +11,17 @@ router.get('/', (req, res) => {
   res.status(200).send('Welcome to Banka api version 1');
 });
 
-// Users endpoint
+// Auth Endpoints
 router
   .post('/auth/signup', userValidation.validateSignup, userController.userSignup)
   .post('/auth/signin', userValidation.validateSignin, userController.userSignin);
+
+// Users Endpoints
+router.get(
+  '/users/:userEmail/accounts',
+  userValidation.assertEmailExist,
+  userController.getUserAccounts,
+);
 
 // Accounts endpoint
 router
