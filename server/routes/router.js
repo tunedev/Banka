@@ -25,7 +25,7 @@ router.get(
 
 // Accounts endpoint
 router
-  .get('/accounts', accountController.getAllAccounts)
+  .get('/accounts', accountValidation.getAccounts, accountController.getAllAccounts)
   .post('/accounts/', accountValidation.postAccount, accountController.postAccount)
   .patch(
     '/accounts/:accountNumber',

@@ -215,9 +215,14 @@ class AccountController {
    * @memberof AccountController
    */
   static async getAllAccounts(req, res) {
-    const result = await accounts.getAll();
+    let result = await accounts.getAll();
+    const { status } = req.query;
 
-    response.success(res, 200, 'successful', result);
+    if (status === 'active' || status === 'dormant') {
+      result = await accounts.getByStatus(status);
+    }
+
+    return response.success(res, 200, 'successful', result);
   }
 }
 

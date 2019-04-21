@@ -1,7 +1,7 @@
 import validate from 'validate.js';
 import validator from 'validator';
 
-const generateIncorrectTypeErrMsg = (field, type) => `${field} should be a valid ${type} type, please ammend as appropriate`;
+const generateIncorrectTypeErrMsg = (field, type) => `Expect ${field} to be a valid ${type} type, please ammend as appropriate`;
 
 class Validation {
   /**
@@ -37,6 +37,23 @@ class Validation {
     const wrongInput = inputPairs.find(valuePairs => typeof valuePairs[1] !== 'string');
 
     return wrongInput ? generateIncorrectTypeErrMsg(wrongInput[0], 'string') : null;
+  }
+
+  /**
+   *validates fields that are required to be type string
+   *
+   * @static validateStringtype
+   * @param {object} input
+   * @returns error message indicating the first input that is not a
+    string, and null if non is found
+   * @memberof Validate
+   */
+  static textType(input) {
+    const inputPairs = Object.entries(input);
+
+    const wrongInput = inputPairs.find(valuePairs => !validator.isAlpha(valuePairs[1]));
+
+    return wrongInput ? generateIncorrectTypeErrMsg(wrongInput[0], 'text') : null;
   }
 
   /**
