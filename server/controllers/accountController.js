@@ -188,6 +188,23 @@ class AccountController {
 
     return response.success(res, 200, 'Transaction gotten successfully', result);
   }
+
+  /**
+   *handles get specific account endpoint
+   *
+   * @static getSpecificAccount
+   * @param {object} req
+   * @param {object} res
+   * @returns
+   * @memberof AccountController
+   */
+  static async getSpecificAccount(req, res) {
+    const { accountNumber } = req.body;
+
+    const result = await accounts.findByAccountNumber(accountNumber);
+
+    return response.success(res, 200, 'Successful', result);
+  }
 }
 
 export default AccountController;
