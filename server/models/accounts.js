@@ -122,6 +122,15 @@ class Accounts {
       return err.stack;
     }
   }
+
+  static async getByOwner(ownerId) {
+    try {
+      const result = await db.query('SELECT * FROM accounts WHERE owner = $1', [ownerId]);
+      return result.rows;
+    } catch (err) {
+      return err.stack;
+    }
+  }
 }
 
 export default Accounts;

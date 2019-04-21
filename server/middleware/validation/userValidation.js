@@ -1,5 +1,6 @@
 import Validate from '../../helpers/validation';
 import response from '../../helpers/response';
+import users from '../../models/users';
 
 class UserValidation {
   /**
@@ -72,6 +73,27 @@ class UserValidation {
 
     if (requiredNotGiven) return response.error(res, 400, requiredNotGiven);
 
+    next();
+  }
+
+  /**
+   *Validates if specified user mail belongs to an existing user
+   *
+   * @static assertEmailExist
+   * @param {object} req
+   * @param {object} res
+   * @param {object} next
+   * @returns
+   * @memberof UserValidation
+   */
+  static async assertEmailExist(req, res, next) {
+    const email = req.params.userEmail;
+
+    const result = await users.getByEmail(email);
+
+    if (!result) return response.error(res, 404, 'user with email does not exist yet');
+
+    req.body.id = result.id;
     next();
   }
 }

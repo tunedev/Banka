@@ -200,3 +200,23 @@ describe('Post /api/v1/auth/signin', () => {
     });
   });
 });
+
+describe('Get /users/userEmail/accounts', () => {
+  const endpoint = '/api/v1/users/clientmail@mail.com/accounts';
+
+  it('should get all accounts belonging to specified user', async () => {
+    const res = await request(app).get(endpoint);
+
+    expect(res).to.have.status(200);
+    expect(res.body).to.have.property('data');
+  });
+
+  describe('# Edge Cases', () => {
+    it('should flag for non existing mail', async () => {
+      const res = await request(app).get('/api/v1/users/wrongmail/accounts');
+
+      expect(res).to.have.status(404);
+      expect(res.body).to.have.property('error');
+    });
+  });
+});
