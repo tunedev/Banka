@@ -1,9 +1,18 @@
+/* Thanks to Gary Simon on the design pattern*/
+:root {
+  --shadow: 0px 0px 3px rgba(0, 0, 0, 0.4);
+}
+
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,600|Oswald:400,600,700');
 
 body,
-html {
-  font-family: 'Oswald', sans-serif;
+html,
+.logo,
+.logo--big,
+.logo--admin {
+  font-family: 'Montserrat', sans-serif;
   letter-spacing: 0.5;
+  font-weight: 500;
 }
 
 h1,
@@ -11,9 +20,8 @@ h2,
 h3,
 h4,
 h5,
-h6,
-.logo {
-  font-family: 'Montserrat', sans-serif;
+h6 {
+  font-family: 'Oswald', sans-serif;
 }
 
 body {
@@ -56,9 +64,14 @@ body,
   background: #fff;
   height: 85vh;
   width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.main-wrapper {
   overflow-y: auto;
   overflow-x: hidden;
-  box-sizing: border-box;
+  height: 100%;
 }
 
 .landing__page {
@@ -71,6 +84,13 @@ body,
   height: 100%;
   margin: 0;
   box-sizing: border-box;
+}
+
+input,
+textarea,
+select,
+a {
+  outline: none;
 }
 
 .landing__page::before {
@@ -186,7 +206,7 @@ body,
 .transaction-full__body,
 .user__info-body,
 .account__info {
-  font-size: 12px;
+  font-size: 10px;
 }
 
 .sidebar__text {
@@ -214,7 +234,7 @@ body,
 
 .menu {
   left: 0px;
-  z-index: 999;
+  z-index: 1;
   transition: all 0.9s;
 }
 
@@ -276,7 +296,7 @@ body,
 }
 
 .monitor {
-  width: 90%;
+  width: 100%;
   margin: 1rem auto;
   animation: monitorIn 1s ease-in-out forwards;
   opacity: 0;
@@ -352,7 +372,7 @@ body,
 }
 
 .content-title__text {
-  font-size: 18px;
+  font-size: 16px;
   color: #33a19d;
   text-transform: capitalize;
 }
@@ -504,7 +524,7 @@ body,
   grid-template-columns: 30% auto;
   background: #fff;
   border-radius: 13px;
-  box-shadow: 3px 3px 8px #555555;
+  box-shadow: var(--shadow);
   padding: 0.3rem 1.5rem;
   width: 80%;
   margin: 0.8rem auto;
@@ -519,7 +539,7 @@ body,
 .transaction__date,
 .transaction__details,
 .transaction-full__date {
-  color: #707070;
+  color: #000;
   text-align: justify;
 }
 
@@ -558,15 +578,13 @@ body,
 }
 
 .transaction-full {
-  grid-template-rows: 10% auto;
+  grid-template-rows: 20% auto;
   grid-template-columns: auto;
   margin-top: 5rem;
 }
 
 .transaction-full__top {
-  display: grid;
-  grid-template-columns: auto;
-  justify-content: end;
+  justify-self: start;
 }
 
 .transaction-full__main,
@@ -575,15 +593,40 @@ body,
   grid-template-rows: repeat(3, auto);
 }
 
+.transaction-full__main {
+  grid-template-rows: repeat(5, auto);
+  align-self: center;
+  width: 80%;
+  margin: auto;
+}
+
+.transaction__details__title {
+  display: grid;
+  grid-template-columns: auto 5%;
+  margin-top: 0.7rem;
+  color: #555555;
+}
+
+.transaction--close {
+  font-size: 32px;
+  text-align: start;
+  justify-self: start;
+}
+
+.transaction--close:hover {
+  color: #000;
+  cursor: pointer;
+}
+
 .transaction-full__section,
 .user__info,
 .action-center {
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: 40% auto;
 }
 
 .transaction-full__section {
-  grid-template-columns: 40% 1fr;
+  grid-template-columns: 1fr 1fr;
 }
 
 .transaction-full__title,
@@ -705,7 +748,7 @@ body,
 }
 
 .status-active {
-  color: #3df279;
+  color: #33a19d;
 }
 
 .status-dormant {
@@ -723,6 +766,65 @@ body,
   }
 }
 
+.summary-card {
+  box-shadow: var(--shadow);
+  width: 90%;
+  border-radius: 13px;
+  padding-top: 0.8rem;
+  padding-bottom: 1.5rem;
+  box-sizing: border-box;
+}
+
+.summary__container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, auto));
+  max-width: 80%;
+  margin: 4rem auto;
+  grid-gap: 20px;
+}
+
+/* Thanks to w3schools */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 2;
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.7);
+  transition: ease-in-out 0.5s;
+}
+
+.modal__title {
+  margin-bottom: 1.5rem;
+  justify-self: center;
+}
+
+.demo-link {
+  opacity: 0;
+}
+
+.demo-link:hover {
+  opacity: 1;
+}
+
+.demo-btn {
+  max-width: 80%;
+  margin: auto;
+  display: grid;
+  grid-template-columns: auto;
+  grid-auto-rows: repeat(3, auto);
+  grid-gap: 5%;
+}
+
+.modal-response {
+  margin-top: 1.3rem;
+  margin-bottom: 1.3rem;
+}
+
 @media only screen and (min-width: 768px) {
   .container__entry,
   .container {
@@ -730,7 +832,7 @@ body,
     max-width: 90%;
     margin: 0 auto;
     position: relative;
-    box-shadow: 3px 3px 20px #555555;
+    box-shadow: var(--shadow);
   }
 
   .container__entry {
@@ -782,8 +884,12 @@ body,
   .summary-field--mini,
   .transaction-full,
   .summary-field {
-    width: 40%;
-    margin-left: 40%;
+    width: 50%;
+    margin-left: 35%;
+  }
+
+  .transaction-full {
+    max-width: 30%;
   }
 
   .transaction {
@@ -849,16 +955,19 @@ body,
   }
 
   .action-center {
-    grid-template-columns: auto 50%;
+    grid-template-columns: auto 40%;
   }
 
   .action-center__right {
     grid-template-rows: auto;
-    grid-template-columns: auto auto;
+    grid-template-columns: 1fr 1fr;
+    align-content: end;
+    margin-bottom: 1rem;
+    margin-left: 1.5rem;
   }
 
   .action-center__btn {
-    width: 40%;
+    width: 50%;
   }
 
   .action-container {
@@ -888,5 +997,20 @@ body,
   .monitor {
     width: 70%;
     margin: 5rem 4rem;
+  }
+
+  .modal-response {
+    max-width: 70%;
+  }
+  .modal__main {
+    margin-left: 15%;
+  }
+  .summary__container {
+    width: 70%;
+    margin-left: 30%;
+  }
+
+  .summary-card {
+    max-width: 60%;
   }
 }

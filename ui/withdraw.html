@@ -30,46 +30,76 @@
         </div>
         <h3 class="user-name">Jenny Flair</h3>
         <ul class="nav-container">
-          <li>
-            <a href="#" class="nav ">customers</a>
-          </li>
           <li><a href="deposit.html" class="nav">deposit</a></li>
           <li><a href="#" class="nav  active">withdraw</a></li>
           <li><a href="sign-in.html" class="nav  logout">sign-out</a></li>
         </ul>
       </aside>
-      <div class="top-section">
-        <img
-          src="images/menu.svg"
-          alt="Sidebar open button"
-          class="sidebar__open"
-        />
-        <h1 class="logo">Banka</h1>
-      </div>
-      <div class="content-title">
-        <h1 class="content-title__text">withdraw</h1>
-      </div>
+      <div class="main-wrapper">
+        <div class="top-section">
+          <img
+            src="images/menu.svg"
+            alt="Sidebar open button"
+            class="sidebar__open"
+          />
+          <h1 class="logo">Banka</h1>
+        </div>
+        <div class="content-title">
+          <h1 class="content-title__text">withdraw</h1>
+        </div>
 
-      <form class="entry--closer entry">
-        <input
-          type="number"
-          class="entry__input entry__input--bigger"
-          placeholder="account number"
-        />
-        <input
-          type="number"
-          class="entry__input entry-deposit__amount entry__input--bigger"
-          placeholder="amount"
-        />
-        <textarea
-          class="entry__input entry__input--remark entry__input--bigger"
-          placeholder="remark"
-        ></textarea>
-        <button class="btn entry__btn entry__input--bigger">
-          withdraw
-        </button>
-      </form>
+        <form class="entry--closer entry">
+          <input
+            type="number"
+            class="entry__input entry__input--bigger"
+            placeholder="account number"
+          />
+          <input
+            type="number"
+            class="entry__input entry-deposit__amount entry__input--bigger"
+            placeholder="amount"
+          />
+          <textarea
+            class="entry__input entry__input--remark entry__input--bigger"
+            placeholder="remark"
+          ></textarea>
+          <button class="btn modal__open entry__btn entry__input--bigger">
+            withdraw
+          </button>
+        </form>
+      </div>
+      <div class="modal">
+          <div href="#" class="transaction-full">
+            <div class="transaction__details__title">
+              <h1 class="content-title__text modal__title">Confirm Withdrawal</h1>
+            </div>
+            <div class="transaction-full__main modal__main">
+              <div class="transaction-full__type transaction-full__section">
+                <h4 class="transaction-full__title">
+                  Account Name
+                </h4>
+                <p class="transaction-full__body">Sanusi Babatunde</p>
+              </div>
+              <div class="transaction-full__type transaction-full__section">
+                <h4 class="transaction-full__title">
+                  Account Number
+                </h4>
+                <p class="transaction-full__body">0112123231</p>
+              </div>
+              <div class="transaction-amount transaction-full__section">
+                <h4 class="transaction-full__title">
+                  remark
+                </h4>
+                <p class="transaction-full__body">From Kolawole Oshinowo, 08092121411</p>
+              </div>
+              <div class="transaction-full__section modal-response">
+                <button class="btn modal__close action-center__btn btn-secondary">cancel</button>
+                <button class="btn action-center__btn">confirm</button>
+              </div>
+            </div>
+        </div>
     </main>
     <script src="./scripts/sidebar.js"></script>
+    <script src="./scripts/modal.js"></script>
   </body>
 </html>

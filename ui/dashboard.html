@@ -4,10 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-    />
     <link rel="stylesheet" href="css/main.css" />
     <link
       rel="shortcut icon"
@@ -22,7 +18,11 @@
       <aside class="sidebar sidebar--light">
         <a class="sidebar__close">&times;</a>
         <div class="avatar">
-          <img class="avatar__img" src="images/avatar5.png" alt="user picture" />
+          <img
+            class="avatar__img"
+            src="images/avatar5.png"
+            alt="user picture"
+          />
         </div>
         <h3 class="user-name">John Doe</h3>
         <ul class="nav-container">
@@ -36,40 +36,44 @@
           <li><a href="sign-in.html" class="nav  logout">sign-out</a></li>
         </ul>
       </aside>
-      <div class="top-section">
-        <img
-          src="images/menu.svg"
-          alt="Sidebar open button"
-          class="sidebar__open"
-        />
-        <h1 class="logo">Banka</h1>
-      </div>
-      <div class="content-title">
-        <h1 class="content-title__text">Account summary</h1>
-      </div>
-      <div class="summary-field">
-        <img
-          class="summary__nav"
-          src="images/left-arrow.svg"
-          alt="left arrow navigator"
-        />
-        <div class="summary">
-          <div class="account-type">
-            <p class="account-type__text">current account</p>
+      <div class="main-wrapper">
+        <div class="top-section">
+          <img
+            src="images/menu.svg"
+            alt="Sidebar open button"
+            class="sidebar__open"
+          />
+          <h1 class="logo">Banka</h1>
+        </div>
+        <div class="content-title">
+          <h1 class="content-title__text">Account summary</h1>
+        </div>
+        <div class="summary__container">
+          <div class="summary summary-card">
+            <div class="account-type">
+              <p class="account-type__text">current account</p>
+            </div>
+            <div class="account-number">
+              <p class="account-number__text">0005894789</p>
+            </div>
+            <div class="account-balance">
+              &#8358;
+              <span class="account-balance__text">0.00</span>
+            </div>
           </div>
-          <div class="account-number">
-            <p class="account-number__text">0005894789</p>
-          </div>
-          <div class="account-balance">
-            &#8358;
-            <span class="account-balance__text">0.00</span>
+          <div class="summary summary-card">
+            <div class="account-type">
+              <p class="account-type__text">savings account</p>
+            </div>
+            <div class="account-number">
+              <p class="account-number__text">0005894790</p>
+            </div>
+            <div class="account-balance">
+              &#8358;
+              <span class="account-balance__text">45,000.00</span>
+            </div>
           </div>
         </div>
-        <img
-          class="summary__nav"
-          src="images/right-arrow.svg"
-          alt="right arrow navigator"
-        />
       </div>
     </main>
     <script src="./scripts/sidebar.js"></script>
