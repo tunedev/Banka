@@ -1,6 +1,5 @@
 import db from '../database/index';
 
-// generate a random ten(10) digit
 const generateAccountNumber = () => {
   const numbers = [];
 
@@ -23,7 +22,9 @@ class Accounts {
    */
   static async getAll() {
     try {
-      const result = await db.queryNoParams('SELECT * FROM accounts ORDER BY id');
+      const result = await db.queryNoParams(
+        'SELECT * FROM accounts ORDER BY id'
+      );
       return result.rows;
     } catch (err) {
       return err.code;
@@ -34,7 +35,7 @@ class Accounts {
    * Save new account to the accounts table
    *
    * @static saveAccount
-   * @param {object} { id, type }
+   * @param {object} { id, type } - UserId & User Type
    * @returns the new account details
    * @memberof Accounts
    */
@@ -44,8 +45,10 @@ class Accounts {
 
     try {
       const result = await db.query(
-        `INSERT INTO accounts (${name.join(', ')}) VALUES ($1, $2, $3) RETURNING *`,
-        params,
+        `INSERT INTO accounts (${name.join(
+          ', '
+        )}) VALUES ($1, $2, $3) RETURNING *`,
+        params
       );
       return result.rows[0];
     } catch (err) {
@@ -63,9 +66,10 @@ class Accounts {
    */
   static async findByAccountNumber(accountnumber) {
     try {
-      const result = await db.query('SELECT * FROM accounts WHERE accountnumber = $1', [
-        accountnumber,
-      ]);
+      const result = await db.query(
+        'SELECT * FROM accounts WHERE accountnumber = $1',
+        [accountnumber]
+      );
       return result.rows[0];
     } catch (err) {
       return err.code;
@@ -80,14 +84,13 @@ class Accounts {
    * @returns account number and new status
    * @memberof Accounts
    */
-  static async toggleStatus(accountnumber) {
+  static async toggleStatus(accountnumber, status) {
     try {
       const result = await db.query(
         `UPDATE accounts 
-      SET status = CASE WHEN status = 'active' THEN 'dormant'
-      WHEN status = 'dormant' THEN 'active' END
+      SET status = $2
       WHERE accountnumber = $1 RETURNING accountnumber,status`,
-        [accountnumber],
+        [accountnumber, status]
       );
       return result.rows[0];
     } catch (err) {
@@ -107,7 +110,7 @@ class Accounts {
     try {
       const result = await db.query(
         'DELETE FROM accounts WHERE accountnumber = $1 RETURNING accountnumber',
-        [accountnumber],
+        [accountnumber]
       );
       return result.rows[0];
     } catch (err) {
@@ -119,16 +122,17 @@ class Accounts {
    * Performs debit on account in record
    *
    * @static debit
-   * @param {object} accountnumber
-   * @param {object} amount
+   * @param {integer} accountnumber
+   * @param {integer} amount - amount to be debited
    * @returns
    * @memberof Accounts
    */
   static async debit(accountnumber, amount) {
     try {
       const result = await db.query(
-        `UPDATE accounts SET balance = balance - ${amount} WHERE accountnumber = $1 RETURNING balance`,
-        [accountnumber],
+        `UPDATE accounts SET balance = balance - ${amount} 
+        WHERE accountnumber = $1 RETURNING balance`,
+        [accountnumber]
       );
       return result.rows[0];
     } catch (err) {
@@ -141,15 +145,16 @@ class Accounts {
    *
    * @static credit
    * @param {object} accountnumber
-   * @param {object} amount
+   * @param {object} amount - amount to be debited
    * @returns
    * @memberof Accounts
    */
   static async credit(accountnumber, amount) {
     try {
       const result = await db.query(
-        `UPDATE accounts SET balance = balance + ${amount} WHERE accountnumber = $1 RETURNING balance`,
-        [accountnumber],
+        `UPDATE accounts SET balance = balance + ${amount} 
+        WHERE accountnumber = $1 RETURNING balance`,
+        [accountnumber]
       );
       return result.rows[0];
     } catch (err) {
@@ -167,16 +172,29 @@ class Accounts {
    */
   static async getByOwner(ownerId) {
     try {
-      const result = await db.query('SELECT * FROM accounts WHERE owner = $1', [ownerId]);
+      const result = await db.query('SELECT * FROM accounts WHERE owner = $1', [
+        ownerId
+      ]);
       return result.rows;
     } catch (err) {
       return err.code;
     }
   }
 
-  static async getByStatus(status) {
+  /**
+   * Fetches account numbers with the indicated status
+   *
+   * @static
+   * @param {string} accountStatus - account status either dormant or active
+   * @returns
+   * @memberof Accounts
+   */
+  static async getByStatus(accountStatus) {
     try {
-      const result = await db.query('SELECT * FROM accounts WHERE status = $1', [status]);
+      const result = await db.query(
+        'SELECT * FROM accounts WHERE status = $1',
+        [accountStatus]
+      );
       return result.rows;
     } catch (err) {
       return err.code;

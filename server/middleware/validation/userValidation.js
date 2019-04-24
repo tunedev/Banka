@@ -1,62 +1,71 @@
 import Validate from '../../helpers/validation';
-import response from '../../helpers/response';
+import responseHandler from '../../helpers/response';
 import users from '../../models/users';
+
+const { error } = responseHandler;
 
 class UserValidation {
   /**
-   *helps validate that the data passed in through the signp end point is as expected
+   *helps validate that the data passed in through the
+   signp end point is as expected
    *
    * @static validateSignup
-   * @param {object} req
-   * @param {object} res
+   * @param {object} request
+   * @param {object} response
    * @param {function} next
    * @returns error message that guides for correct use of this endpoint
    * @memberof UserValidation
    */
-  static validateSignup(req, res, next) {
+  static async validateSignup(request, response, next) {
     const {
-      firstName, lastName, email, phoneNumber, password,
-    } = req.body;
+      firstName, lastName, email, phoneNumber, password
+    } = request.body;
 
     const requiredNotGiven = Validate.requiredFieldIsGiven({
       firstName,
       lastName,
       email,
       phoneNumber,
-      password,
+      password
     });
 
     if (requiredNotGiven) {
-      return response.error(res, 400, requiredNotGiven);
+      return error(response, 400, requiredNotGiven);
     }
 
     const isStringNotValid = Validate.stringType({
       firstName,
       lastName,
-      password,
+      password
     });
 
     if (isStringNotValid) {
-      return response.error(res, 400, isStringNotValid);
+      return error(response, 400, isStringNotValid);
     }
 
     const isNotText = Validate.textType({ firstName, lastName });
     if (isNotText) {
-      return response.error(res, 400, isNotText);
+      return error(response, 400, isNotText);
     }
 
     const isEmailNotValid = Validate.emailType({ email });
     if (isEmailNotValid) {
-      return response.error(res, 400, isEmailNotValid);
+      return error(response, 400, isEmailNotValid);
     }
 
     const isPasswordSecure = Validate.minPasswordLength({ password });
     if (isPasswordSecure) {
-      return response.error(res, 400, isPasswordSecure);
+      return error(response, 400, isPasswordSecure);
     }
 
     const isPhoneNumberNotValid = Validate.phoneNumberValid({ phoneNumber });
-    if (isPhoneNumberNotValid) return response.error(res, 400, isPhoneNumberNotValid);
+    if (isPhoneNumberNotValid) {
+      return error(response, 400, isPhoneNumberNotValid);
+    }
+
+    const result = await users.getByEmail(email);
+
+    if (result) return error(response, 404, 'user with email already exist');
 
     next();
   }
@@ -65,18 +74,19 @@ class UserValidation {
    *validates that the expected data are passed to the signin route
    *
    * @static validateSignup
-   * @param {object} req
-   * @param {object} res
+   * @param {object} request
+   * @param {object} response
    * @param {function} next
-   * @returns error messages to guide users in passing expected input to the signin endpoint
+   * @returns error messages to guide users in passing expected
+   input to the signin endpoint
    * @memberof UserValidation
    */
-  static validateSignin(req, res, next) {
-    const { email, password } = req.body;
+  static validateSignin(request, response, next) {
+    const { email, password } = request.body;
 
     const requiredNotGiven = Validate.requiredFieldIsGiven({ email, password });
 
-    if (requiredNotGiven) return response.error(res, 400, requiredNotGiven);
+    if (requiredNotGiven) return error(response, 400, requiredNotGiven);
 
     next();
   }
@@ -85,20 +95,26 @@ class UserValidation {
    *Validates if specified user mail belongs to an existing user
    *
    * @static assertEmailExist
-   * @param {object} req
-   * @param {object} res
+   * @param {object} request
+   * @param {object} response
    * @param {object} next
    * @returns
    * @memberof UserValidation
    */
-  static async assertEmailExist(req, res, next) {
-    const email = req.params.userEmail;
+  static async assertEmailExist(request, response, next) {
+    const email = request.params.userEmail;
 
     const result = await users.getByEmail(email);
 
-    if (!result) return response.error(res, 404, 'user with email does not exist yet');
+    if (!result) {
+      return error(
+        response,
+        404,
+        'user with email already exist does not exist'
+      );
+    }
 
-    req.body.id = result.id;
+    request.body.id = result.id;
     next();
   }
 }

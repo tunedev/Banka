@@ -1,18 +1,35 @@
 import jwt from 'jsonwebtoken';
 
+const { SECRET_KEY } = process.env;
+
 class Auth {
   /**
-   *helps to sign a user with payload
+   * Helps to sign a user with payload
    *
    * @static
-   * @param {*} { email, type }
+   * @param {object} payload - consists of user email, id, and user type
    * @returns
    * @memberof Auth
    */
-  static async generateToken({ id }) {
-    return jwt.sign({ id }, process.env.SECRET_KEY, {
-      expiresIn: '2h',
-    });
+  static async generateToken(payload) {
+    return jwt.sign(payload, SECRET_KEY);
+  }
+
+  /**
+   * Helps decode token for authentication
+   *
+   * @static decodeToken
+   * @param {encodedString} token - encoded token
+   * @returns
+   * @memberof Auth
+   */
+  static async decodeToken(token) {
+    try {
+      const decoded = await jwt.verify(token, SECRET_KEY);
+      return decoded;
+    } catch (err) {
+      throw Error(err);
+    }
   }
 }
 
