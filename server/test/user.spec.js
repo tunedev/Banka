@@ -6,10 +6,29 @@ import app from '../server';
 chai.use(chaihttp);
 const { expect, request } = chai;
 
+let adminToken;
+
+describe('Hooks', () => {
+  const endpoint = '/api/v1/auth/signin';
+  it('should get token for admin user', async () => {
+    const payload = {
+      email: 'admin@banka.com',
+      password: 'intuitively',
+    };
+
+    const res = await request(app)
+      .post(endpoint)
+      .send(payload);
+
+    expect(res).to.have.status(201);
+    adminToken = res.body.data.token;
+  });
+});
+
 describe('Post /api/v1/auth/signup', () => {
   const endpoint = '/api/v1/auth/signup';
 
-  it('should create a new User', async () => {
+  it('should create a new client User', async () => {
     const payload = {
       password: 'passworded',
       firstName: 'John',
@@ -25,6 +44,28 @@ describe('Post /api/v1/auth/signup', () => {
     expect(res).to.have.status(201);
     expect(res.body.data.email).to.equal(payload.email);
     expect(res.body.data).to.have.property('token');
+    expect(res.body.data.type).to.equal('client');
+  });
+
+  it('should create a new staff User', async () => {
+    const payload = {
+      password: 'passworded',
+      firstName: 'John',
+      lastName: 'Doe',
+      phoneNumber: '+2348100101054',
+      email: 'jnnyTestStaff@mail.com',
+      isAdmin: false,
+    };
+
+    const res = await request(app)
+      .post(endpoint)
+      .set({ Authorization: `Bearer ${adminToken}` })
+      .send(payload);
+
+    expect(res).to.have.status(201);
+    expect(res.body.data.email).to.equal(payload.email);
+    expect(res.body.data).to.have.property('token');
+    expect(res.body.data.type).to.equal('staff');
   });
 
   describe('# Edge cases', () => {
@@ -41,6 +82,25 @@ describe('Post /api/v1/auth/signup', () => {
         .send(payload);
 
       expect(res).to.have.status(400);
+      expect(res.body).to.have.property('error');
+    });
+
+    it('should flag for invalid token', async () => {
+      const payload = {
+        password: 'passworded',
+        firstName: 'John',
+        lastName: 'Doe',
+        phoneNumber: '+2348100101054',
+        email: 'jnnyTest@mail.com',
+        isAdmin: false,
+      };
+
+      const res = await request(app)
+        .post(endpoint)
+        .set({ Authorization: 'Bearer InvalidToken' })
+        .send(payload);
+
+      expect(res).to.have.status(401);
       expect(res.body).to.have.property('error');
     });
 
@@ -196,26 +256,6 @@ describe('Post /api/v1/auth/signin', () => {
         .send(payload);
 
       expect(res).to.have.status(400);
-      expect(res.body).to.have.property('error');
-    });
-  });
-});
-
-describe('Get /users/userEmail/accounts', () => {
-  const endpoint = '/api/v1/users/clientmail@mail.com/accounts';
-
-  it('should get all accounts belonging to specified user', async () => {
-    const res = await request(app).get(endpoint);
-
-    expect(res).to.have.status(200);
-    expect(res.body).to.have.property('data');
-  });
-
-  describe('# Edge Cases', () => {
-    it('should flag for non existing mail', async () => {
-      const res = await request(app).get('/api/v1/users/wrongmail/accounts');
-
-      expect(res).to.have.status(404);
       expect(res.body).to.have.property('error');
     });
   });

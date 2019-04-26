@@ -3,67 +3,114 @@ import userValidation from '../middleware/validation/userValidation';
 import userController from '../controllers/userController';
 import accountController from '../controllers/accountController';
 import accountValidation from '../middleware/validation/accountValidation';
+import authorization from '../middleware/authorization';
 
 const router = express.Router();
+const {
+  createUserType,
+  requireToken,
+  adminStaffOnly,
+  generalUser,
+  staffOnly
+} = authorization;
+const {
+  getAccounts,
+  postAccount,
+  accountNumber,
+  transaction,
+  confirmSufficientBalance,
+  validateStatusToggle,
+  idNumberType
+} = accountValidation;
+const { validateSignin, validateSignup, assertEmailExist } = userValidation;
+const {
+  postCredit,
+  postDebit,
+  getAllAccounts,
+  getAllTransactions,
+  getSpecificAccount,
+  deleteAccount,
+  postAccounts,
+  patchAccount,
+  getSpecificTransaction
+} = accountController;
+const { userSignup, getUserAccounts, userSignin } = userController;
 
-// Entry endpoint of the app's version 1
-router.get('/', (req, res) => {
-  res.status(200).send('Welcome to Banka api version 1');
+router.get('/', (request, response) => {
+  response.status(200).send('Welcome to Banka api version 1');
 });
 
 // Auth Endpoints
 router
-  .post('/auth/signup', userValidation.validateSignup, userController.userSignup)
-  .post('/auth/signin', userValidation.validateSignin, userController.userSignin);
+  .post('/auth/signup', createUserType, validateSignup, userSignup)
+  .post('/auth/signin', validateSignin, userSignin);
 
 // Users Endpoints
 router.get(
   '/users/:userEmail/accounts',
-  userValidation.assertEmailExist,
-  userController.getUserAccounts,
+  requireToken,
+  adminStaffOnly,
+  assertEmailExist,
+  getUserAccounts
 );
 
 // Accounts endpoint
 router
-  .get('/accounts', accountValidation.getAccounts, accountController.getAllAccounts)
-  .post('/accounts/', accountValidation.postAccount, accountController.postAccount)
+  .get('/accounts', requireToken, adminStaffOnly, getAccounts, getAllAccounts)
+  .post('/accounts', requireToken, generalUser, postAccount, postAccounts)
   .patch(
     '/accounts/:accountNumber',
-    accountValidation.accountNumber,
-    accountController.patchAccount,
+    requireToken,
+    adminStaffOnly,
+    accountNumber,
+    validateStatusToggle,
+    patchAccount
   )
   .delete(
     '/accounts/:accountNumber',
-    accountValidation.accountNumber,
-    accountController.deleteAccount,
+    requireToken,
+    adminStaffOnly,
+    accountNumber,
+    deleteAccount
   )
   .get(
     '/accounts/:accountNumber',
-    accountValidation.accountNumber,
-    accountController.getSpecificAccount,
+    requireToken,
+    adminStaffOnly,
+    accountNumber,
+    getSpecificAccount
   )
   .post(
     '/accounts/:accountNumber/debit',
-    accountValidation.accountNumber,
-    accountValidation.transaction,
-    accountValidation.confirmSufficientBalance,
-    accountController.postDebit,
+    requireToken,
+    staffOnly,
+    accountNumber,
+    transaction,
+    confirmSufficientBalance,
+    postDebit
   )
   .post(
     '/accounts/:accountNumber/credit',
-    accountValidation.accountNumber,
-    accountValidation.transaction,
-    accountController.postCredit,
+    requireToken,
+    staffOnly,
+    accountNumber,
+    transaction,
+    postCredit
   )
   .get(
     '/accounts/:accountNumber/transactions',
-    accountValidation.accountNumber,
-    accountController.getAllTransactions,
+    requireToken,
+    generalUser,
+    accountNumber,
+    getAllTransactions
   )
   .get(
     '/accounts/:accountNumber/transactions/:id',
-    accountValidation.accountNumber,
-    accountController.getSpecificTransaction,
+    requireToken,
+    generalUser,
+    accountNumber,
+    idNumberType,
+    getSpecificTransaction
   );
 
 export default router;

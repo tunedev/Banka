@@ -1,7 +1,6 @@
 import { encrypt } from '../helpers/encrypt';
 import db from './index';
 
-// Helps seed database with dummy data for testing and admin access
 (async () => {
   console.log('seeding database with dummy data');
 

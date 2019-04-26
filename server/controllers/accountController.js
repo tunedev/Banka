@@ -1,87 +1,93 @@
 import users from '../models/users';
 import accounts from '../models/accounts';
 import transactions from '../models/transactions';
-import response from '../helpers/response';
+import responseHandler from '../helpers/response';
+
+const { error, success } = responseHandler;
 
 class AccountController {
   /**
-   *handles the request to add a new account
+   * Handles the request to add a new account
    *
    * @static
-   * @param {object} req
-   * @param {object} res
+   * @param {object} request
+   * @param {object} response
    * @returns new account details as a response
    * @memberof AccountController
    */
-  static async postAccount(req, res) {
-    const { id, type } = req.body;
-
+  static async postAccounts(request, response) {
+    const { id, type } = request.body;
     const userDetails = await users.getById(id);
 
-    if (!userDetails) return response.error(res, 404, 'user id specified does not exist');
+    if (!userDetails) {
+      return error(response, 404, 'user id specified does not exist');
+    }
 
     const { email, firstname, lastname } = userDetails;
 
     const result = await accounts.save({ id, type });
-
     const { accountnumber } = result;
 
-    return response.success(res, 201, 'Account created successful', {
+    return success(response, 201, 'Account created successful', {
       accountNumber: accountnumber,
       firstName: firstname,
       lastName: lastname,
       email,
-      type,
+      type
     });
   }
 
   /**
-   *handles the request to add toggle accounts status
+   * Handles the request to add toggle accounts status
    *
    * @static patchAccount
-   * @param {object} req
-   * @param {object} res
+   * @param {object} request
+   * @param {object} response
    * @returns account number and accounts new status as a response
    * @memberof AccountController
    */
-  static async patchAccount(req, res) {
-    const { accountNumber } = req.body;
+  static async patchAccount(request, response) {
+    const { accountNumber, status } = request.body;
 
-    const result = await accounts.toggleStatus(accountNumber);
+    const result = await accounts.toggleStatus(accountNumber, status);
 
-    return response.success(res, 200, 'Status toggled successfully', { ...result });
+    return success(response, 200, 'Account status was changed successfully', {
+      ...result
+    });
   }
 
   /**
-   *handles request to api/v1/accounts/:accountNumber
+   * Handles request to delete an account
    *
    * @static static deleteAccount
-   * @param {object} req
-   * @param {object} res
+   * @param {object} request
+   * @param {object} response
    * @returns respose for successful request
    * @memberof AccountController
    */
-  static async deleteAccount(req, res) {
-    const { accountNumber } = req.body;
+  static async deleteAccount(request, response) {
+    const { accountNumber } = request.body;
 
     const result = await accounts.delete(accountNumber);
 
-    return response.success(res, 200, 'Account successfully deleted', { ...result });
+    return success(response, 200, 'Account successfully deleted', {
+      ...result
+    });
   }
 
   /**
-   *helps handle debit transaction and saves the transaction details in record
+   * Helps handle debit transaction and saves the transaction details in record
    *
    * @static postDebit
-   * @param {object} req
-   * @param {object} res
+   * @param {object} request
+   * @param {object} response
    * @returns response with transaction details
    * @memberof AccountController
    */
-  static async postDebit(req, res) {
+  static async postDebit(request, response) {
     const {
-      amount, id, oldBalance, accountNumber,
-    } = req.body;
+      amount, id, oldBalance, accountNumber
+    } = request.body;
 
     const transactionType = 'debit';
 
@@ -95,34 +101,32 @@ class AccountController {
       cashierId: id,
       amount,
       oldBalance,
-      newBalance,
+      newBalance
     });
 
-    if (result === '23503') return response.error(res, 400, 'cashier id does not match any in our record');
-
-    return response.success(res, 201, 'Account has been debited successfully', {
+    return success(response, 201, 'Account has been debited successfully', {
       transactionId: result.id,
       accountNumber,
       amount,
       cashier: id,
       transactionType: result.type,
-      balance: newBalance,
+      balance: newBalance
     });
   }
 
   /**
-   *helps handle credit transaction and saves the transaction details in record
+   * Helps handle credit transaction and saves the transaction details in record
    *
    * @static postCredit
-   * @param {object} req
-   * @param {object} res
+   * @param {object} request
+   * @param {object} response
    * @returns response with transaction details
    * @memberof AccountController
    */
-  static async postCredit(req, res) {
+  static async postCredit(request, response) {
     const {
-      amount, id, accountNumber, oldBalance,
-    } = req.body;
+      amount, id, accountNumber, oldBalance
+    } = request.body;
 
     const transactionType = 'credit';
 
@@ -135,94 +139,104 @@ class AccountController {
       cashierId: id,
       amount,
       oldBalance,
-      newBalance,
+      newBalance
     });
 
-    if (result === '23503') return response.error(res, 400, 'cashier id does not match any in our record');
-
-    return response.success(res, 201, 'Account has been credited successfully', {
+    return success(response, 201, 'Account has been credited successfully', {
       transactionId: result.id,
       accountNumber,
       amount,
       cashier: id,
       transactionType: result.type,
-      balance: newBalance,
+      balance: newBalance
     });
   }
 
   /**
-   *Handles Get request for all transaction done on an account
+   * Handles Get request for all transaction done on an account
    *
    * @static getAllTransactions
-   * @param {object} req
-   * @param {object} res
+   * @param {object} request
+   * @param {object} response
    * @returns an array of accounts transaction as a response with a message
    * @memberof AccountController
    */
-  static async getAllTransactions(req, res) {
-    const { accountNumber } = req.body;
+  static async getAllTransactions(request, response) {
+    const { accountNumber } = request.body;
 
     const result = await transactions.getByAccountNumber(accountNumber);
 
-    return response.success(res, 200, 'Transactions have been gotten successfully', result);
+    return success(
+      response,
+      200,
+      'Transactions have been gotten successfully',
+      result
+    );
   }
 
   /**
-   *Handles get request for a specific transaction on an account
+   * Handles get request for a specific transaction on an account
    *
    * @static getSpecificTransaction
-   * @param {object} req
-   * @param {object} res
+   * @param {object} request
+   * @param {object} response
    * @returns the transaction with the specified id
    * @memberof AccountController
    */
-  static async getSpecificTransaction(req, res) {
-    const { accountNumber } = req.body;
-    const id = parseInt(req.params.id, 10);
+  static async getSpecificTransaction(request, response) {
+    const { accountNumber, id } = request.body;
 
-    const result = await transactions.getByAccountNumberAndId(accountNumber, id);
+    const result = await transactions.getByAccountNumberAndId(
+      accountNumber,
+      id
+    );
 
-    if (!result) return response.error(res, 404, 'Transaction with specified id does not exist');
+    if (!result) {
+      return error(
+        response,
+        404,
+        'Transaction with specified id does not exist'
+      );
+    }
 
-    if (result === '22P02') return response.error(res, 400, 'Id should be an Integer type');
-
-    return response.success(res, 200, 'Transaction gotten successfully', result);
+    return success(response, 200, 'Transaction gotten successfully', result);
   }
 
   /**
-   *handles get specific account endpoint
+   * Handles get specific account endpoint
    *
    * @static getSpecificAccount
-   * @param {object} req
-   * @param {object} res
+   * @param {object} request
+   * @param {object} response
    * @returns
    * @memberof AccountController
    */
-  static async getSpecificAccount(req, res) {
-    const { accountNumber } = req.body;
+  static async getSpecificAccount(request, response) {
+    const { accountNumber } = request.body;
 
     const result = await accounts.findByAccountNumber(accountNumber);
 
-    return response.success(res, 200, 'Successful', result);
+    return success(response, 200, 'Successful', result);
   }
 
   /**
-   *Handles request made to get all acounts endpoint
+   * Handles request made to get all acounts endpoint
    *
    * @static getAllAccount
-   * @param {object} req
-   * @param {object} res
+   * @param {object} request
+   * @param {object} response
    * @memberof AccountController
    */
-  static async getAllAccounts(req, res) {
-    let result = await accounts.getAll();
-    const { status } = req.query;
+  static async getAllAccounts(request, response) {
+    const { status } = request.query;
 
+    let result;
     if (status === 'active' || status === 'dormant') {
       result = await accounts.getByStatus(status);
+    } else {
+      result = await accounts.getAll();
     }
-
-    return response.success(res, 200, 'successful', result);
+    return success(response, 200, 'successful', result);
   }
 }
 
