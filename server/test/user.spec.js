@@ -13,7 +13,7 @@ describe('Hooks', () => {
   it('should get token for admin user', async () => {
     const payload = {
       email: 'admin@banka.com',
-      password: 'intuitively',
+      password: 'intuitively'
     };
 
     const res = await request(app)
@@ -34,7 +34,7 @@ describe('Post /api/v1/auth/signup', () => {
       firstName: 'John',
       lastName: 'Doe',
       phoneNumber: '+2348100101054',
-      email: 'jnnyTest@mail.com',
+      email: 'jnnyTest@mail.com'
     };
 
     const res = await request(app)
@@ -54,7 +54,7 @@ describe('Post /api/v1/auth/signup', () => {
       lastName: 'Doe',
       phoneNumber: '+2348100101054',
       email: 'jnnyTestStaff@mail.com',
-      isAdmin: false,
+      isAdmin: false
     };
 
     const res = await request(app)
@@ -74,7 +74,7 @@ describe('Post /api/v1/auth/signup', () => {
         firstName: 'John',
         lastName: 'Doe',
         phoneNumber: '+23490988376',
-        email: 'johndoe@mail.com',
+        email: 'johndoe@mail.com'
       };
 
       const res = await request(app)
@@ -92,7 +92,7 @@ describe('Post /api/v1/auth/signup', () => {
         lastName: 'Doe',
         phoneNumber: '+2348100101054',
         email: 'jnnyTest@mail.com',
-        isAdmin: false,
+        isAdmin: false
       };
 
       const res = await request(app)
@@ -110,7 +110,7 @@ describe('Post /api/v1/auth/signup', () => {
         firstName: 'John',
         lastName: 'Doe',
         phoneNumber: '+23490988376',
-        email: 'johndoemail.com',
+        email: 'johndoemail.com'
       };
 
       const res = await request(app)
@@ -126,25 +126,25 @@ describe('Post /api/v1/auth/signup', () => {
         password: 'passworded',
         firstName: 'John',
         lastName: 'Doe',
-        phoneNumber: '+23490988376',
-        email: 'jnnyTest@mail.com',
+        phoneNumber: '08121212121',
+        email: 'jnnyTest@mail.com'
       };
 
       const res = await request(app)
         .post(endpoint)
         .send(payload);
 
-      expect(res).to.have.status(400);
+      expect(res).to.have.status(409);
       expect(res.body).to.have.property('error');
     });
 
-    it('should flag for qouted multiple space', async () => {
+    it('should flag for qouted multiple space as an empty field', async () => {
       const payload = {
         password: 'passworded',
         firstName: '    ',
         lastName: 'Doe',
         phoneNumber: '+23490988376',
-        email: 'example1@mail.com',
+        email: 'example1@mail.com'
       };
 
       const res = await request(app)
@@ -161,7 +161,7 @@ describe('Post /api/v1/auth/signup', () => {
         firstName: 'John',
         lastName: 'Doe',
         phoneNumber: '0988376',
-        email: 'example1@mail.com',
+        email: 'example1@mail.com'
       };
 
       const res = await request(app)
@@ -178,7 +178,7 @@ describe('Post /api/v1/auth/signup', () => {
         firstName: 'John',
         lastName: 'Doe',
         phoneNumber: '+23490988376',
-        email: 'example1@mail.com',
+        email: 'example1@mail.com'
       };
       const res = await request(app)
         .post(endpoint)
@@ -196,7 +196,7 @@ describe('Post /api/v1/auth/signin', () => {
   it('should signin to account and get a token', async () => {
     const payload = {
       email: 'jnnyTest@mail.com',
-      password: 'passworded',
+      password: 'passworded'
     };
 
     const res = await request(app)
@@ -212,7 +212,7 @@ describe('Post /api/v1/auth/signin', () => {
     it('should flag for invalid credentials', async () => {
       const payload = {
         email: 'incorrect@mail.com',
-        password: 'password',
+        password: 'password'
       };
       const res = await request(app)
         .post(endpoint)
@@ -225,7 +225,7 @@ describe('Post /api/v1/auth/signin', () => {
     it('should flag for invalid credentials', async () => {
       const payload = {
         email: 'example1@mail.com',
-        password: 'incorrectpass',
+        password: 'incorrectpass'
       };
       const res = await request(app)
         .post(endpoint)
@@ -237,7 +237,7 @@ describe('Post /api/v1/auth/signin', () => {
 
     it('should flag for empty required field', async () => {
       const payload = {
-        password: 'password',
+        password: 'password'
       };
       const res = await request(app)
         .post(endpoint)
@@ -249,7 +249,7 @@ describe('Post /api/v1/auth/signin', () => {
 
     it('should flag for empty required field', async () => {
       const payload = {
-        email: 'incorrect@mail.com',
+        email: 'incorrect@mail.com'
       };
       const res = await request(app)
         .post(endpoint)
