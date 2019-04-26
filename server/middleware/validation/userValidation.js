@@ -6,7 +6,7 @@ const { error } = responseHandler;
 
 class UserValidation {
   /**
-   *helps validate that the data passed in through the
+   * @description Helps validate that the data passed in through the
    signp end point is as expected
    *
    * @static validateSignup
@@ -17,61 +17,74 @@ class UserValidation {
    * @memberof UserValidation
    */
   static async validateSignup(request, response, next) {
+    let errors = {};
     const {
       firstName, lastName, email, phoneNumber, password
     } = request.body;
 
-    const requiredNotGiven = Validate.requiredFieldIsGiven({
-      firstName,
-      lastName,
-      email,
-      phoneNumber,
-      password
-    });
+    const requiredNotGiven = Validate.requiredFieldIsGiven(
+      {
+        firstName,
+        lastName,
+        email,
+        phoneNumber,
+        password
+      },
+      errors
+    );
 
     if (requiredNotGiven) {
-      return error(response, 400, requiredNotGiven);
+      errors = requiredNotGiven;
     }
 
-    const isStringNotValid = Validate.stringType({
-      firstName,
-      lastName,
-      password
-    });
+    const isStringNotValid = Validate.stringType(
+      {
+        firstName,
+        lastName,
+        password
+      },
+      errors
+    );
 
     if (isStringNotValid) {
-      return error(response, 400, isStringNotValid);
+      errors = isStringNotValid;
     }
 
-    const isNotText = Validate.textType({ firstName, lastName });
+    const isNotText = Validate.textType({ firstName, lastName }, errors);
     if (isNotText) {
-      return error(response, 400, isNotText);
+      errors = isNotText;
     }
 
-    const isEmailNotValid = Validate.emailType({ email });
+    const isEmailNotValid = Validate.emailType({ email }, errors);
     if (isEmailNotValid) {
-      return error(response, 400, isEmailNotValid);
+      errors = isEmailNotValid;
     }
 
-    const isPasswordSecure = Validate.minPasswordLength({ password });
+    const isPasswordSecure = Validate.minPasswordLength({ password }, errors);
     if (isPasswordSecure) {
-      return error(response, 400, isPasswordSecure);
+      errors = isPasswordSecure;
     }
 
-    const isPhoneNumberNotValid = Validate.phoneNumberValid({ phoneNumber });
+    const isPhoneNumberNotValid = Validate.phoneNumberValid(
+      { phoneNumber },
+      errors
+    );
     if (isPhoneNumberNotValid) {
       return error(response, 400, isPhoneNumberNotValid);
     }
 
     const result = await users.getByEmail(email);
 
-    if (result) return error(response, 404, 'user with email already exist');
+    if (result) {
+      return error(response, 409, 'conflict user with email already exist');
+    }
 
     next();
   }
 
   /**
-   *validates that the expected data are passed to the signin route
+   * @description validates that the expected
+   data are passed to the signin route
    *
    * @static validateSignup
    * @param {object} request
@@ -83,16 +96,28 @@ class UserValidation {
    */
   static validateSignin(request, response, next) {
     const { email, password } = request.body;
+    let errors = {};
 
-    const requiredNotGiven = Validate.requiredFieldIsGiven({ email, password });
+    const requiredNotGiven = Validate.requiredFieldIsGiven(
+      { email, password },
+      errors
+    );
 
-    if (requiredNotGiven) return error(response, 400, requiredNotGiven);
+    if (requiredNotGiven) {
+      errors = requiredNotGiven;
+    }
+
+    const isEmailNotValid = Validate.emailType({ email }, errors);
+    if (isEmailNotValid) {
+      return error(response, 400, isEmailNotValid);
+    }
 
     next();
   }
 
   /**
-   *Validates if specified user mail belongs to an existing user
+   * @description Validates if specified user
+    mail belongs to an existing user
    *
    * @static assertEmailExist
    * @param {object} request
