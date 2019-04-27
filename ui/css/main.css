@@ -89,7 +89,8 @@ body,
 input,
 textarea,
 select,
-a {
+a,
+button {
   outline: none;
 }
 
@@ -206,7 +207,7 @@ a {
 .transaction-full__body,
 .user__info-body,
 .account__info {
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .sidebar__text {
@@ -889,11 +890,13 @@ a {
   }
 
   .transaction-full {
-    max-width: 30%;
+    max-width: 25%;
+    padding-bottom: 1.8rem;
+    margin: 2rem auto;
   }
 
   .transaction {
-    margin-left: 37%;
+    margin-left: 33%;
   }
 
   .entry__input--bigger {
@@ -1012,5 +1015,9 @@ a {
 
   .summary-card {
     max-width: 60%;
+  }
+
+  .modal {
+    padding: 3rem auto;
   }
 }
