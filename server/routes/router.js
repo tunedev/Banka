@@ -10,8 +10,10 @@ const {
   createUserType,
   requireToken,
   adminStaffOnly,
+  staffOrAccountsOwner,
   generalUser,
-  staffOnly
+  staffOnly,
+  staffAdminEmailOwner
 } = authorization;
 const {
   getAccounts,
@@ -49,8 +51,8 @@ router
 router.get(
   '/users/:userEmail/accounts',
   requireToken,
-  adminStaffOnly,
   assertEmailExist,
+  staffAdminEmailOwner,
   getUserAccounts
 );
 
@@ -76,8 +78,8 @@ router
   .get(
     '/accounts/:accountNumber',
     requireToken,
-    adminStaffOnly,
     accountNumber,
+    staffOrAccountsOwner,
     getSpecificAccount
   )
   .post(
@@ -100,15 +102,15 @@ router
   .get(
     '/accounts/:accountNumber/transactions',
     requireToken,
-    generalUser,
     accountNumber,
+    staffOrAccountsOwner,
     getAllTransactions
   )
   .get(
     '/accounts/:accountNumber/transactions/:id',
     requireToken,
-    generalUser,
     accountNumber,
+    staffOrAccountsOwner,
     idNumberType,
     getSpecificTransaction
   );

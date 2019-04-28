@@ -1,11 +1,7 @@
 import validate from 'validate.js';
 import validator from 'validator';
 
-const generateIncorrectTypeErrMsg = (
-  field,
-  type
-) => `Expect ${field} to be a valid ${type} type, 
-  please ammend as appropriate`;
+const generateIncorrectTypeErrMsg = (field, type) => `Expect ${field} to be a valid ${type} type`;
 
 class Validation {
   /**
@@ -17,14 +13,22 @@ class Validation {
    first field not provided, and null otherwise
    * @memberof ValidateUser
    */
-  static requiredFieldIsGiven(input) {
+  static requiredFieldIsGiven(input, errors) {
     const generateNotGivenErrMsg = field => `${field} required, please provide`;
 
     const inputPairs = Object.entries(input);
 
-    const wrongInput = inputPairs.find(valuePairs => validate.isEmpty(valuePairs[1]));
+    inputPairs
+      .filter(valuePairs => validate.isEmpty(valuePairs[1]))
+      .forEach((values) => {
+        if (Object.keys(errors).includes(values[0])) {
+          errors[values[0]] += ` ,${generateNotGivenErrMsg(values[0])}`;
+        } else {
+          errors[values[0]] = generateNotGivenErrMsg(values[0]);
+        }
+      });
 
-    return wrongInput ? generateNotGivenErrMsg(wrongInput[0]) : null;
+    return Object.keys(errors).length > 0 ? errors : null;
   }
 
   /**
@@ -36,16 +40,24 @@ class Validation {
     string, and null if non is found
    * @memberof Validate
    */
-  static stringType(input) {
+  static stringType(input, errors) {
     const inputPairs = Object.entries(input);
 
-    const wrongInput = inputPairs.find(
-      valuePairs => typeof valuePairs[1] !== 'string'
-    );
+    inputPairs
+      .filter(valuePairs => !validate.isEmpty(valuePairs[1]))
+      .filter(valuePairs => typeof valuePairs[1] !== 'string')
+      .forEach((values) => {
+        if (Object.keys(errors).includes(values[0])) {
+          errors[values[0]] += ` ,${generateIncorrectTypeErrMsg(
+            values[0],
+            'string'
+          )}`;
+        } else {
+          errors[values[0]] = generateIncorrectTypeErrMsg(values[0], 'string');
+        }
+      });
 
-    return wrongInput
-      ? generateIncorrectTypeErrMsg(wrongInput[0], 'string')
-      : null;
+    return Object.keys(errors).length > 0 ? errors : null;
   }
 
   /**
@@ -57,16 +69,24 @@ class Validation {
     string, and null if non is found
    * @memberof Validate
    */
-  static textType(input) {
+  static textType(input, errors) {
     const inputPairs = Object.entries(input);
 
-    const wrongInput = inputPairs.find(
-      valuePairs => !validator.isAlpha(valuePairs[1])
-    );
+    inputPairs
+      .filter(valuePairs => !validate.isEmpty(valuePairs[1]))
+      .filter(valuePairs => !validator.isAlpha(valuePairs[1]))
+      .forEach((values) => {
+        if (Object.keys(errors).includes(values[0])) {
+          errors[values[0]] += ` ,${generateIncorrectTypeErrMsg(
+            values[0],
+            'text'
+          )}`;
+        } else {
+          errors[values[0]] = generateIncorrectTypeErrMsg(values[0], 'text');
+        }
+      });
 
-    return wrongInput
-      ? generateIncorrectTypeErrMsg(wrongInput[0], 'text')
-      : null;
+    return Object.keys(errors).length > 0 ? errors : null;
   }
 
   /**
@@ -78,16 +98,24 @@ class Validation {
    input that is not an integer,and null otherwise
    * @memberof Validate
    */
-  static numberType(input) {
+  static numberType(input, errors) {
     const inputPairs = Object.entries(input);
 
-    const wrongInput = inputPairs.find(
-      valuePairs => !validator.isNumeric(valuePairs[1])
-    );
+    inputPairs
+      .filter(valuePairs => !validate.isEmpty(valuePairs[1]))
+      .filter(valuePairs => !validator.isNumeric(valuePairs[1]))
+      .forEach((values) => {
+        if (Object.keys(errors).includes(values[0])) {
+          errors[values[0]] += ` ,${generateIncorrectTypeErrMsg(
+            values[0],
+            'number'
+          )}`;
+        } else {
+          errors[values[0]] = generateIncorrectTypeErrMsg(values[0], 'number');
+        }
+      });
 
-    return wrongInput
-      ? generateIncorrectTypeErrMsg(wrongInput[0], 'number')
-      : null;
+    return Object.keys(errors).length > 0 ? errors : null;
   }
 
   /**
@@ -98,16 +126,24 @@ class Validation {
    * @returns error message indicating the email input is invalid
    * @memberof Validate
    */
-  static emailType(input) {
+  static emailType(input, errors) {
     const inputPairs = Object.entries(input);
 
-    const wrongInput = inputPairs.find(
-      valuePairs => !validator.isEmail(valuePairs[1])
-    );
+    inputPairs
+      .filter(valuePairs => !validate.isEmpty(valuePairs[1]))
+      .filter(valuePairs => !validator.isEmail(valuePairs[1]))
+      .forEach((values) => {
+        if (Object.keys(errors).includes(values[0])) {
+          errors[values[0]] += ` ,${generateIncorrectTypeErrMsg(
+            values[0],
+            'email'
+          )}`;
+        } else {
+          errors[values[0]] = generateIncorrectTypeErrMsg(values[0], 'email');
+        }
+      });
 
-    return wrongInput
-      ? generateIncorrectTypeErrMsg(wrongInput[0], 'email')
-      : null;
+    return Object.keys(errors).length > 0 ? errors : null;
   }
 
   /**
@@ -119,16 +155,27 @@ class Validation {
    correct phone number format, and an error message otherwise
    * @memberof Validate
    */
-  static phoneNumberValid(input) {
+  static phoneNumberValid(input, errors) {
     const inputPairs = Object.entries(input);
 
-    const wrongInput = inputPairs.find(
-      valuePairs => !validator.isMobilePhone(valuePairs[1])
-    );
+    inputPairs
+      .filter(valuePairs => !validate.isEmpty(valuePairs[1]))
+      .filter(valuePairs => !validator.isMobilePhone(valuePairs[1]))
+      .forEach((values) => {
+        if (Object.keys(errors).includes(values[0])) {
+          errors[values[0]] += ` ,${generateIncorrectTypeErrMsg(
+            values[0],
+            'phone number'
+          )}`;
+        } else {
+          errors[values[0]] = generateIncorrectTypeErrMsg(
+            values[0],
+            'phone number'
+          );
+        }
+      });
 
-    return wrongInput
-      ? `${generateIncorrectTypeErrMsg(wrongInput[0], 'phone Number')}`
-      : null;
+    return Object.keys(errors).length > 0 ? errors : null;
   }
 
   /**
@@ -140,14 +187,21 @@ class Validation {
    and above, and returns an error message otherwise
    * @memberof Validate
    */
-  static minPasswordLength(input) {
+  static minPasswordLength(input, errors) {
     const inputPairs = Object.entries(input);
 
-    const wrongInput = inputPairs.find(valuePairs => valuePairs[1].length <= 6);
+    inputPairs
+      .filter(valuePairs => !validate.isEmpty(valuePairs[1]))
+      .filter(valuePairs => valuePairs[1].length <= 6)
+      .forEach((values) => {
+        if (Object.keys(errors).includes(values[0])) {
+          errors[values[0]] += ` ,${values[0]}'s length should be 6 or above`;
+        } else {
+          errors[values[0]] = `${values[0]}'s length should be 6 or above`;
+        }
+      });
 
-    return wrongInput
-      ? `${wrongInput[0]}'s length should be 6 or above `
-      : null;
+    return Object.keys(errors).length > 0 ? errors : null;
   }
 }
 

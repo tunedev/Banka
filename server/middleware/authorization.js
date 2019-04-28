@@ -18,7 +18,7 @@ class authorization {
 
     if (!headerAuth && !request.body.token) {
       request.body.type = 'client';
-      request.isAdmin = null;
+      request.isAdmin = false;
       next();
       return;
     }
@@ -29,14 +29,14 @@ class authorization {
     try {
       decoded = await auth.decodeToken(token);
     } catch (err) {
-      return error(response, 401, 'Token Invalid');
+      return error(response, 401, 'Invalid Token, reauthenticate');
     }
 
     const { type } = decoded;
     const { isAdmin } = request.body;
 
     request.body.type = type === 'admin' ? 'staff' : 'client';
-    request.body.isAdmin = type === 'admin' ? isAdmin : null;
+    request.body.isAdmin = type === 'admin' ? isAdmin : false;
 
     next();
   }
@@ -132,6 +132,56 @@ class authorization {
 
     request.body.id = id;
     next();
+  }
+
+  /**
+   * @description Validates that the client accessing
+   another user's that it accounts.
+   *
+   * @static
+   * @param {*} request
+   * @param {*} response
+   * @param {*} next
+   * @returns
+   * @memberof authorization
+   */
+  static staffOrAccountsOwner(request, response, next) {
+    const { decoded, accountOwner } = request.body;
+    const { type, id } = decoded;
+
+    if (accountOwner === id || type === 'staff') {
+      next();
+      return;
+    }
+
+    return error(
+      response,
+      403,
+      "You are not Authorized to view this account's details"
+    );
+  }
+
+  /**
+   * @description Validates that the client accessing
+   another user's that it accounts.
+   *
+   * @static
+   * @param {*} request
+   * @param {*} response
+   * @param {*} next
+   * @returns
+   * @memberof authorization
+   */
+  static staffAdminEmailOwner(request, response, next) {
+    const { decoded, id } = request.body;
+    const { type, isadmin } = decoded;
+
+    if (decoded.id === id || (type === 'staff' && isadmin)) {
+      next();
+      return;
+    }
+
+    return error(response, 403, 'You are not Authorized to view this details');
   }
 }
 

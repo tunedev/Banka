@@ -12,19 +12,24 @@ deposit money.
 
 ## Banka app
 
-Its front end is hosted on gh-pages [here](https://swisskid95.github.io/Banka/ui)
+The front end of the app is hosted on gh-pages [here](https://swisskid95.github.io/Banka/ui)
+The documentation can be found [here](https://swisskid-banka.herokuapp.com/api-docs)
 
 The version 1 of this apps api is hosted on heroku and you can access it using this [link](https://swisskid-banka.herokuapp.com/api/v1)
 
 ## Features
 
 - User(client) can sign up 
-- user(client) can sign in
+- User(client) can sign in
+- User admin can create a staff user account
 - User(client) can create new account
 - User(staff/cashier) can debit client
 - User(staff/cashier) can credit client
-- User(staff/admin) can toggle accounts status to either dormant and active
-- User(staff.admin) can delete user(client)'s account
+- User(staff/admin) can switch a bank accounts status to either dormant and active
+- User(staff/admin) can delete a bank account
+- User can get all bank accounts
+- User can get all transactions on a particular account
+- User can get a specific transaction with its id
 - Work Still In Progress
 
 ## Dependencies
@@ -46,15 +51,16 @@ To use this app you would need the following installed on your machine:
 > - Node js for server-side logic
 > - Express for http logic
 > - Babel for transpiling code to support wide range of browsers
+> - Swagger(open api) for documentation
 
 > Test Driven Development (TDD)
-> - Mocha and expect-library for testing
-> - Super-test for request simulations
+> - Mocha and chai-assertion-library for testing
+> - Chai-http for request simulations
 
 > Continuous Integration
 > - Travis CI for continuous integration
 > - Codeclimate for code quality report
-> - Coveralls for test coverage
+> - Coveralls for test coverage report
 
 ***
 

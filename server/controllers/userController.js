@@ -62,7 +62,7 @@ class UserController {
     if (!userDetails) return error(response, 401, 'Wrong email or password');
 
     const {
-      id, firstname, lastname, email, password
+      id, firstname, lastname, email, password, type
     } = userDetails;
 
     const isPasswordMatch = await confirm(request.body.password, password);
@@ -80,7 +80,8 @@ class UserController {
         id,
         firstname,
         lastname,
-        email
+        email,
+        type
       }
     });
   }

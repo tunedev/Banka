@@ -9,7 +9,8 @@ const {
 
 class AccountValidation {
   /**
-   * Validates that the post request are all comforming to the criteria
+   * @description Validates that the post request
+    are all comforming to the criteria
    *
    * @static postAccount
    * @param {object} request
@@ -20,14 +21,15 @@ class AccountValidation {
    */
   static postAccount(request, response, next) {
     const { id, type } = request.body;
+    let errors = {};
 
-    const requiredNotGiven = requiredFieldIsGiven({ id, type });
+    const requiredNotGiven = requiredFieldIsGiven({ id, type }, errors);
 
     if (requiredNotGiven) {
-      return error(response, 400, requiredNotGiven);
+      errors = requiredNotGiven;
     }
 
-    const isNotString = stringType({ type });
+    const isNotString = stringType({ type }, errors);
     if (isNotString) {
       return error(response, 400, isNotString);
     }
@@ -43,7 +45,7 @@ class AccountValidation {
   }
 
   /**
-   * Validates that the patch request that
+   * @description Validates that the patch request that
    it contains an existing account number
    *
    * @static patchAccount
@@ -54,10 +56,14 @@ class AccountValidation {
    * @memberof ValidateAccount
    */
   static async accountNumber(request, response, next) {
+    const errors = {};
     const { accountNumber } = request.params;
-    const isNotNumberType = numberType({
-      accountNumber
-    });
+    const isNotNumberType = numberType(
+      {
+        accountNumber
+      },
+      errors
+    );
     if (isNotNumberType) {
       return error(response, 400, 'Account number should be a number');
     }
@@ -77,13 +83,18 @@ class AccountValidation {
       );
     }
 
+    const { balance, owner } = accountDetails;
+
     request.body.accountNumber = accountnumber;
-    request.body.oldBalance = accountDetails.balance;
+    request.body.oldBalance = balance;
+    request.body.accountOwner = owner;
+
     next();
   }
 
   /**
-   * Validates that the account to debit has sufficient funds
+   * @description Validates that the account
+   to debit has sufficient funds
    *
    * @static confirmSufficientBalance
    * @param {object} request
@@ -107,7 +118,7 @@ class AccountValidation {
   }
 
   /**
-   * Validates that required inputs are given
+   * @description Validates that required inputs are given
    and that amount is a positive number
    *
    * @static transaction
@@ -119,14 +130,14 @@ class AccountValidation {
    */
   static transaction(request, response, next) {
     const { amount, id } = request.body;
+    const errors = {};
 
-    const requiredNotGiven = requiredFieldIsGiven({ id, amount });
-
+    const requiredNotGiven = requiredFieldIsGiven({ id, amount }, errors);
     if (requiredNotGiven) {
       return error(response, 400, requiredNotGiven);
     }
 
-    const isNotNumberType = numberType(amount);
+    const isNotNumberType = numberType(amount, errors);
     if (isNotNumberType) {
       return error(response, 400, isNotNumberType);
     }
@@ -139,7 +150,7 @@ class AccountValidation {
   }
 
   /**
-   * Validates input request query parameter
+   * @description Validates input request query parameter
    *
    * @static
    * @param {object} request
@@ -150,9 +161,10 @@ class AccountValidation {
    */
   static getAccounts(request, response, next) {
     const { status } = request.query;
+    const errors = {};
 
     if (status) {
-      const isNotText = textType({ status });
+      const isNotText = textType({ status }, errors);
       if (isNotText) {
         return error(response, 400, 'Status value expected string');
       }
@@ -172,7 +184,7 @@ class AccountValidation {
   }
 
   /**
-   * Validates that the input status is given
+   * @description Validates that the input status is given
    and it is either active or dormant
    *
    * @static validateStatusToggle
@@ -184,15 +196,16 @@ class AccountValidation {
    */
   static validateStatusToggle(request, response, next) {
     const { status } = request.body;
+    const errors = {};
 
-    const requiredNotGiven = requiredFieldIsGiven({ status });
+    const requiredNotGiven = requiredFieldIsGiven({ status }, errors);
 
     if (requiredNotGiven) {
       return error(response, 400, requiredNotGiven);
     }
 
     if (status) {
-      const isNotText = textType({ status });
+      const isNotText = textType({ status }, errors);
       if (isNotText) {
         return error(response, 400, 'Status value expected string');
       }
@@ -211,10 +224,22 @@ class AccountValidation {
     next();
   }
 
+  /**
+   *@description validates id provided in as a parameter
+   is a number type
+   *
+   * @static
+   * @param {*} request
+   * @param {*} response
+   * @param {*} next
+   * @returns
+   * @memberof AccountValidation
+   */
   static idNumberType(request, response, next) {
     const { id } = request.params;
+    const errors = {};
 
-    const isNotNumberType = numberType({ id });
+    const isNotNumberType = numberType({ id }, errors);
     if (isNotNumberType) {
       return error(response, 400, isNotNumberType);
     }

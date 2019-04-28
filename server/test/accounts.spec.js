@@ -1,5 +1,6 @@
 import chai from 'chai';
 import chaihttp from 'chai-http';
+
 // local libraries
 import app from '../server';
 
@@ -7,6 +8,7 @@ chai.use(chaihttp);
 const { expect, request } = chai;
 
 let testAccountNumber;
+let testAccountNumber2;
 let clientToken;
 let staffAdminToken;
 let staffCashierToken;
@@ -73,6 +75,20 @@ describe('POST create new account', () => {
     expect(res.body.data).to.have.property('accountNumber');
     expect(res).to.have.status(201);
     testAccountNumber = res.body.data.accountNumber;
+  });
+
+  it('should create new account', async () => {
+    const payload = {
+      type: 'savings'
+    };
+    const res = await request(app)
+      .post(endpoint)
+      .set({ Authorization: `Bearer ${staffCashierToken}` })
+      .send(payload);
+
+    expect(res.body.data).to.have.property('accountNumber');
+    expect(res).to.have.status(201);
+    testAccountNumber2 = res.body.data.accountNumber;
   });
 
   describe('# Edge cases', () => {
@@ -185,6 +201,16 @@ describe('get specific account', () => {
     expect(res.body.data.accountnumber).to.equal(testAccountNumber);
   });
 
+  it(`should return specified accountNumber's
+   details for owner of account also`, async () => {
+    const res = await request(app)
+      .get(`/api/v1/accounts/${testAccountNumber}`)
+      .set({ Authorization: `Bearer ${clientToken}` });
+
+    expect(res).to.have.status(200);
+    expect(res.body.data.accountnumber).to.equal(testAccountNumber);
+  });
+
   describe('# Edge cases', () => {
     it(`should flag that the specified
      account number does not exist`, async () => {
@@ -193,6 +219,16 @@ describe('get specific account', () => {
         .set({ Authorization: `Bearer ${staffAdminToken}` });
 
       expect(res).to.have.status(404);
+      expect(res.body).to.have.property('error');
+    });
+
+    it(`should flag client trying to access 
+    another clients account details`, async () => {
+      const res = await request(app)
+        .get(`/api/v1/accounts/${testAccountNumber2}`)
+        .set({ Authorization: `Bearer ${clientToken}` });
+
+      expect(res).to.have.status(403);
       expect(res.body).to.have.property('error');
     });
 
@@ -249,6 +285,17 @@ describe('PATCH account status toggle', () => {
     expect(res.body.data.status).to.equal('dormant');
   });
 
+  it(`should toggle specified 
+  account number's from active to dormant`, async () => {
+    const res = await request(app)
+      .patch(`/api/v1/accounts/${testAccountNumber2}`)
+      .set({ Authorization: `Bearer ${staffAdminToken}` })
+      .send({ status: 'dormant' });
+
+    expect(res).to.have.status(200);
+    expect(res.body.data.status).to.equal('dormant');
+  });
+
   it('should return specified account with specified status', async () => {
     const res = await request(app)
       .get('/api/v1/accounts?status=dormant')
@@ -271,6 +318,17 @@ describe('PATCH account status toggle', () => {
   account number's status from dormant to active`, async () => {
     const res = await request(app)
       .patch(`/api/v1/accounts/${testAccountNumber}`)
+      .set({ Authorization: `Bearer ${staffAdminToken}` })
+      .send({ status: 'active' });
+
+    expect(res).to.have.status(200);
+    expect(res.body.data.status).to.equal('active');
+  });
+
+  it(`should toggle the specified 
+  account number's status from dormant to active`, async () => {
+    const res = await request(app)
+      .patch(`/api/v1/accounts/${testAccountNumber2}`)
       .set({ Authorization: `Bearer ${staffAdminToken}` })
       .send({ status: 'active' });
 
@@ -363,7 +421,26 @@ describe('Get /users/userEmail/accounts', () => {
     expect(res.body).to.have.property('data');
   });
 
+  it(`should get all accounts belonging to 
+  a specified user with the users token`, async () => {
+    const res = await request(app)
+      .get(endpoint)
+      .set({ Authorization: `Bearer ${clientToken}` });
+
+    expect(res).to.have.status(200);
+    expect(res.body).to.have.property('data');
+  });
+
   describe('# Edge Cases', () => {
+    it(`should flag for unauthorized access`, async () => {
+      const res = await request(app)
+        .get(endpoint)
+        .set({ Authorization: `Bearer ${staffCashierToken}` });
+
+      expect(res).to.have.status(403);
+      expect(res.body).to.have.property('error');
+    });
+
     it('should flag for non existing mail', async () => {
       const res = await request(app)
         .get('/api/v1/users/wrongmail/accounts')
@@ -533,6 +610,16 @@ describe('Get all transactions made on an account', () => {
   });
 
   describe('# Edge cases', () => {
+    it(`should flag for client trying to
+    access another's account number`, async () => {
+      const res = await request(app)
+        .get(`/api/v1/accounts/${testAccountNumber2}/transactions`)
+        .set({ Authorization: `Bearer ${clientToken}` });
+
+      expect(res).to.have.status(403);
+      expect(res.body).to.have.property('error');
+    });
+
     it('should flag for wrong account number length', async () => {
       const res = await request(app)
         .get('/api/v1/accounts/121212121212121212/transactions')
@@ -567,6 +654,18 @@ describe('GET specific transaction', () => {
   });
 
   describe('# Edge cases', () => {
+    it(`should client trying to access another
+      client account number transaction`, async () => {
+      const id = 1;
+
+      const res = await request(app)
+        .get(`/api/v1/accounts/${testAccountNumber2}/transactions/${id}`)
+        .set({ Authorization: `Bearer ${clientToken}` });
+
+      expect(res).to.have.status(403);
+      expect(res.body).to.have.property('error');
+    });
+
     it('should flag for wrong account number', async () => {
       const res = await request(app)
         .get('/api/v1/accounts/12121212121212121212/transactions/1')
