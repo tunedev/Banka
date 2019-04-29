@@ -13,6 +13,7 @@ deposit money.
 ## Banka app
 
 The front end of the app is hosted on gh-pages [here](https://swisskid95.github.io/Banka/ui)
+
 The documentation can be found [here](https://swisskid-banka.herokuapp.com/api-docs)
 
 The version 1 of this apps api is hosted on heroku and you can access it using this [link](https://swisskid-banka.herokuapp.com/api/v1)
