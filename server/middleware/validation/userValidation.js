@@ -17,12 +17,12 @@ class UserValidation {
    * @memberof UserValidation
    */
   static async validateSignup(request, response, next) {
-    let errors = {};
+    const errors = {};
     const {
       firstName, lastName, email, phoneNumber, password
     } = request.body;
 
-    const requiredNotGiven = Validate.requiredFieldIsGiven(
+    Validate.requiredFieldIsGiven(
       {
         firstName,
         lastName,
@@ -33,11 +33,7 @@ class UserValidation {
       errors
     );
 
-    if (requiredNotGiven) {
-      errors = requiredNotGiven;
-    }
-
-    const isStringNotValid = Validate.stringType(
+    Validate.stringType(
       {
         firstName,
         lastName,
@@ -46,24 +42,11 @@ class UserValidation {
       errors
     );
 
-    if (isStringNotValid) {
-      errors = isStringNotValid;
-    }
+    Validate.textType({ firstName, lastName }, errors);
 
-    const isNotText = Validate.textType({ firstName, lastName }, errors);
-    if (isNotText) {
-      errors = isNotText;
-    }
+    Validate.emailType({ email }, errors);
 
-    const isEmailNotValid = Validate.emailType({ email }, errors);
-    if (isEmailNotValid) {
-      errors = isEmailNotValid;
-    }
-
-    const isPasswordSecure = Validate.minPasswordLength({ password }, errors);
-    if (isPasswordSecure) {
-      errors = isPasswordSecure;
-    }
+    Validate.minPasswordLength({ password }, errors);
 
     const isPhoneNumberNotValid = Validate.phoneNumberValid(
       { phoneNumber },
@@ -96,16 +79,9 @@ class UserValidation {
    */
   static validateSignin(request, response, next) {
     const { email, password } = request.body;
-    let errors = {};
+    const errors = {};
 
-    const requiredNotGiven = Validate.requiredFieldIsGiven(
-      { email, password },
-      errors
-    );
-
-    if (requiredNotGiven) {
-      errors = requiredNotGiven;
-    }
+    Validate.requiredFieldIsGiven({ email, password }, errors);
 
     const isEmailNotValid = Validate.emailType({ email }, errors);
     if (isEmailNotValid) {

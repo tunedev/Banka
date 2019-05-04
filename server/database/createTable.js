@@ -35,6 +35,7 @@ import db from './index';
       oldbalance FLOAT(2) NOT NULL,
       newbalance FLOAT(2) NOT NULL,
       createdon TIMESTAMPTZ DEFAULT NOW(),
+      remarks TEXT NOT NULL,
       FOREIGN KEY (cashier) REFERENCES users (id) 
     )`);
   } catch (err) {

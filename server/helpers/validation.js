@@ -1,7 +1,8 @@
 import validate from 'validate.js';
 import validator from 'validator';
 
-const generateIncorrectTypeErrMsg = (field, type) => `Expect ${field} to be a valid ${type} type`;
+const generateIncorrectTypeErrMsg = (field, type) => `
+Expect ${field} to be a valid ${type} type`;
 
 class Validation {
   /**

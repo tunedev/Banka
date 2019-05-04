@@ -456,7 +456,8 @@ describe('POST a credit transaction on an account', () => {
   it('should credit account', async () => {
     const payload = {
       id: 1,
-      amount: 2000.0
+      amount: 2000.0,
+      remarks: 'From self banka branch somolu test case'
     };
     const res = await request(app)
       .post(`/api/v1/accounts/${testAccountNumber}/credit`)
@@ -471,7 +472,8 @@ describe('POST a credit transaction on an account', () => {
     it('flag for a non existing account number', async () => {
       const payload = {
         id: 1,
-        amount: 298.89
+        amount: 298.89,
+        remarks: 'From self banka branch somolu test case'
       };
       const res = await request(app)
         .post('/api/v1/accounts/1212334342/credit')
@@ -485,7 +487,8 @@ describe('POST a credit transaction on an account', () => {
     it('flag for a longer than 10 digit account number', async () => {
       const payload = {
         id: 1,
-        amount: 298.89
+        amount: 298.89,
+        remarks: 'From self banka branch somolu test case'
       };
       const res = await request(app)
         .post('/api/v1/accounts/12123343478342/credit')
@@ -511,7 +514,8 @@ describe('POST a credit transaction on an account', () => {
     account number is not a number type`, async () => {
       const payload = {
         id: 1,
-        amount: 298.89
+        amount: 298.89,
+        remarks: 'From self banka branch somolu test case'
       };
 
       const res = await request(app)
@@ -529,7 +533,8 @@ describe('POST a debit transaction on an account', () => {
   it('should debit account', async () => {
     const payload = {
       id: 1,
-      amount: 2000.89
+      amount: 2000.89,
+      remarks: 'From self banka branch somolu test case'
     };
     const res = await request(app)
       .post(`/api/v1/accounts/${testAccountNumber}/credit`)
@@ -544,7 +549,8 @@ describe('POST a debit transaction on an account', () => {
     it('should flag for a non existing account number', async () => {
       const payload = {
         id: 1,
-        amount: 298.89
+        amount: 298.89,
+        remarks: 'From self banka branch somolu test case'
       };
       const res = await request(app)
         .post('/api/v1/accounts/1212334342/debit')
@@ -558,7 +564,8 @@ describe('POST a debit transaction on an account', () => {
     it('should flag for insufficient funds', async () => {
       const payload = {
         id: 1,
-        amount: 2988934.89
+        amount: 2988934.89,
+        remarks: 'From self banka branch somolu test case'
       };
       const res = await request(app)
         .post(`/api/v1/accounts/${testAccountNumber}/debit`)
@@ -584,7 +591,8 @@ describe('POST a debit transaction on an account', () => {
     number is not a number type`, async () => {
       const payload = {
         id: 1,
-        amount: 298.89
+        amount: 298.89,
+        remarks: 'From self banka branch somolu test case'
       };
 
       const res = await request(app)

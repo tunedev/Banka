@@ -14,7 +14,8 @@
     "create-table": "babel-node server/database/createTable",
     "drop-table": "babel-node server/database/dropTable",
     "seed-data": "babel-node server/database/seed",
-    "migration": "npm run drop-table && npm run create-table && npm run seed-data"
+    "migration": "npm run drop-table && npm run create-table && npm run seed-data",
+    "test-mail": "babel-node server/helpers/emailNotifications"
   },
   "repository": {
     "type": "git",
@@ -55,16 +56,18 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.4.3",
+    "@sendgrid/mail": "^6.3.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
-    "swagger-ui-express": "^4.0.2",
     "dotenv": "^7.0.0",
     "express": "^4.16.4",
     "jsonwebtoken": "^8.5.1",
     "mocha": "^6.1.4",
+    "moment": "^2.24.0",
     "morgan": "^1.9.1",
     "nodemon": "^1.18.10",
     "pg": "^7.9.0",
+    "swagger-ui-express": "^4.0.2",
     "validate.js": "^0.12.0",
     "validator": "^10.11.0"
   }
