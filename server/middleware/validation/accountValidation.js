@@ -129,17 +129,16 @@ class AccountValidation {
    * @memberof ValidateAccount
    */
   static transaction(request, response, next) {
-    const { amount, id } = request.body;
+    const { amount, id, remarks } = request.body;
     const errors = {};
 
-    const requiredNotGiven = requiredFieldIsGiven({ id, amount }, errors);
-    if (requiredNotGiven) {
-      return error(response, 400, requiredNotGiven);
-    }
+    requiredFieldIsGiven({ id, amount, remarks }, errors);
 
-    const isNotNumberType = numberType(amount, errors);
-    if (isNotNumberType) {
-      return error(response, 400, isNotNumberType);
+    numberType({ Amount: `${amount}` }, errors);
+
+    const isNotSring = stringType({ remarks }, errors);
+    if (isNotSring) {
+      return error(response, 400, isNotSring);
     }
 
     if (amount < 0) {

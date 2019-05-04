@@ -22,7 +22,8 @@ class Transactions {
     cashierId,
     amount,
     oldBalance,
-    newBalance
+    newBalance,
+    remarks
   }) {
     const names = [
       'type',
@@ -30,7 +31,8 @@ class Transactions {
       'cashier',
       'amount',
       'oldbalance',
-      'newbalance'
+      'newbalance',
+      'remarks'
     ];
     const params = [
       transactionType,
@@ -38,14 +40,15 @@ class Transactions {
       cashierId,
       amount,
       oldBalance,
-      newBalance
+      newBalance,
+      remarks
     ];
 
     try {
       const result = await db.query(
         `INSERT INTO transactions (${names.join(
           ', '
-        )}) VALUES($1, $2, $3, $4, $5, $6) RETURNING *`,
+        )}) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
         params
       );
       return result.rows[0];

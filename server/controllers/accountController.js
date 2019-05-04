@@ -2,6 +2,7 @@ import users from '../models/users';
 import accounts from '../models/accounts';
 import transactions from '../models/transactions';
 import responseHandler from '../helpers/response';
+import emailNotification from '../helpers/emailNotifications';
 
 const { error, success } = responseHandler;
 
@@ -86,7 +87,12 @@ class AccountController {
    */
   static async postDebit(request, response) {
     const {
-      amount, id, oldBalance, accountNumber
+      amount,
+      id,
+      oldBalance,
+      accountNumber,
+      remarks,
+      accountOwner
     } = request.body;
 
     const transactionType = 'debit';
@@ -101,11 +107,16 @@ class AccountController {
       cashierId: id,
       amount,
       oldBalance,
-      newBalance
+      newBalance,
+      remarks
     });
 
+    const transactionId = result.id;
+
+    emailNotification.transactionAlert(result, accountOwner);
+
     return success(response, 201, 'Account has been debited successfully', {
-      transactionId: result.id,
+      transactionId,
       accountNumber,
       amount,
       cashier: id,
@@ -125,7 +136,12 @@ class AccountController {
    */
   static async postCredit(request, response) {
     const {
-      amount, id, accountNumber, oldBalance
+      amount,
+      id,
+      accountNumber,
+      oldBalance,
+      remarks,
+      accountOwner
     } = request.body;
 
     const transactionType = 'credit';
@@ -139,8 +155,11 @@ class AccountController {
       cashierId: id,
       amount,
       oldBalance,
-      newBalance
+      newBalance,
+      remarks
     });
+
+    emailNotification.transactionAlert(result, accountOwner);
 
     return success(response, 201, 'Account has been credited successfully', {
       transactionId: result.id,
@@ -148,7 +167,8 @@ class AccountController {
       amount,
       cashier: id,
       transactionType: result.type,
-      balance: newBalance
+      balance: newBalance,
+      remarks
     });
   }
 
