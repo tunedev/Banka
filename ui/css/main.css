@@ -94,6 +94,10 @@ button {
   outline: none;
 }
 
+.entry__input:focus {
+  border: 2px solid #00178f;
+}
+
 .landing__page::before {
   position: absolute;
   content: ' ';
@@ -206,7 +210,8 @@ button {
 .user__info-title,
 .transaction-full__body,
 .user__info-body,
-.account__info {
+.account__info,
+.helper-text {
   font-size: 12px;
 }
 
@@ -314,6 +319,7 @@ button {
 .entry {
   width: 100%;
   margin: 85px 0 30px 0;
+  transition: ease-in-out 0.5s;
 }
 
 .entry__input,
@@ -325,6 +331,7 @@ button {
   border: 1px solid #707070;
   padding: auto 10px;
   border-radius: 9px;
+  transition: ease-out 0.5s;
 }
 
 ::placeholder,
@@ -355,11 +362,16 @@ button {
   cursor: pointer;
 }
 
-.switch {
+.switch,
+.helper-text {
   text-align: end;
   color: #888888;
   width: 55%;
   margin: 0.5rem auto;
+}
+
+.helper-text {
+  margin: -0.7rem auto 1rem auto;
 }
 
 .switch__link {
@@ -826,6 +838,10 @@ button {
   margin-bottom: 1.3rem;
 }
 
+.helper-text {
+  display: none;
+}
+
 @media only screen and (min-width: 768px) {
   .container__entry,
   .container {
@@ -870,9 +886,15 @@ button {
     margin: 3rem auto 0 10%;
   }
 
-  .switch {
+  .switch,
+  .helper-text {
     margin-left: 50.5%;
     margin-top: 0;
+  }
+
+  .helper-text {
+    width: 20%;
+    margin: -0.7rem 0 1rem 40.5%;
   }
 
   .avatar {
@@ -1020,4 +1042,12 @@ button {
   .modal {
     padding: 3rem auto;
   }
+}
+
+.invalid {
+  border: 2px solid tomato;
+}
+
+.valid {
+  border: 2px solid #33a19d;
 }

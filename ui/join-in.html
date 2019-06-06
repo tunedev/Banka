@@ -15,7 +15,7 @@
       type="image/x-icon"
     />
 
-    <title>Sign in</title>
+    <title>Join in</title>
   </head>
   <body>
     <main class="container__entry">
@@ -40,35 +40,51 @@
         <h1 class="content-title__text">join in</h1>
       </div>
       <form action="dashboard.html" class="entry">
-        <input
-          class="entry__input"
-          type="text"
-          placeholder="Full Name"
-          name="fullName"
-          required
-        />
-        <input
-          class="entry__input"
-          type="tel"
-          placeholder="Phone Number"
-          name="phoneNo"
-          required
-        />
-        <input
-          class="entry__input"
-          type="email"
-          placeholder="Email"
-          name="email"
-          required
-        />
-        <input
-          class="entry__input"
-          type="password"
-          placeholder="Password"
-          name="password"
-          required
-        />
-        <button class="entry__btn btn">Join in</button>
+        <div class="field">
+          <input
+            class="entry__input"
+            type="text"
+            placeholder="Full Name"
+            id="fullName"
+            name="Full Name"
+            required
+          />
+          <span class="helper-text"></span>
+        </div>
+        <div class="field">
+          <input
+            class="entry__input"
+            type="tel"
+            placeholder="Phone Number"
+            name="phone Number"
+            id="phoneNumber"
+            required
+          />
+          <span class="helper-text"></span>
+        </div>
+        <div class="field">
+          <input
+            class="entry__input"
+            type="email"
+            placeholder="Email"
+            name="Email"
+            id="email"
+            required
+          />
+          <span class="helper-text"></span>
+        </div>
+        <div class="field">
+          <input
+            class="entry__input"
+            type="password"
+            placeholder="Password"
+            name="Password"
+            id="password"
+            required
+          />
+          <span class="helper-text"></span>
+        </div>
+        <button class="entry__btn btn" id="submit">Join in</button>
       </form>
       <p class="switch">
         Already a member?
@@ -76,5 +92,7 @@
       </p>
     </main>
     <script src="./scripts/sidebar.js"></script>
+    <script src="scripts/validation.js"></script>
+    <script src="./scripts/join-in.js"></script>
   </body>
 </html>
