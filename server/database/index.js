@@ -5,16 +5,14 @@ dotenv.config();
 
 let connectionString;
 
-if (process.env.NODE_ENV === 'test') connectionString = process.env.DATABASE_URL_TEST;
-else if (process.env.NODE_ENV === 'production') {
-  connectionString = process.env.DATABASE_URL;
+if (process.env.NODE_ENV === 'test') {
+  connectionString = process.env.DATABASE_URL_TEST;
 } else {
-  connectionString = process.env.DATABASE_URL_DEV;
+  connectionString = process.env.DATABASE_URL;
 }
-
 const pool = new Pool({ connectionString });
 
 export default {
   query: (sqlCommand, params) => pool.query(sqlCommand, params),
-  queryNoParams: sqlCommand => pool.query(sqlCommand),
+  queryNoParams: sqlCommand => pool.query(sqlCommand)
 };

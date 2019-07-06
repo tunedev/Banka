@@ -2,6 +2,7 @@ import '@babel/polyfill';
 import express from 'express';
 import bodyParser from 'body-parser';
 import logger from 'morgan';
+import cors from 'cors';
 import dotEnv from 'dotenv';
 import swagger from 'swagger-ui-express';
 import swaggerDocument from './documentation/swagger.json';
@@ -18,6 +19,7 @@ const port = process.env.PORT || 3000;
 
 // Middlewares
 // logs request info for easy tracking
+app.use(cors);
 app.use(logger('dev'));
 
 // Set up body parser in order to access json and urlencoded values
