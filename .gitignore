@@ -81,3 +81,5 @@ typings/
 
 # transpiled file
 dist/
+
+.vscode
