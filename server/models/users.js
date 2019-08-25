@@ -102,7 +102,7 @@ class Users {
    */
   static async getById(id) {
     try {
-      const result = await db.query('SELECT * FROM users WHERE id = $1', [id]);
+      const result = await db.query('SELECT id, firstname, lastname, email, phonenumber FROM users WHERE id = $1', [id]);
       return result.rows[0];
     } catch (err) {
       return err.code;

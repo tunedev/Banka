@@ -235,6 +235,9 @@ class AccountController {
     const { accountNumber } = request.body;
 
     const result = await accounts.findByAccountNumber(accountNumber);
+    const ownerDetails = await users.getById(result.owner);
+
+    result.owner = ownerDetails;
 
     return success(response, 200, 'Successful', result);
   }
